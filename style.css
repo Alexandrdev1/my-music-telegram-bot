@@ -1,21 +1,21 @@
-/* Общие стили в тёмном стиле (не черном) */
+/* Общие стили в стиле Apple */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #1a1a1a; /* Тёмный фон, но не черный */
-    color: #e0e0e0;
+    background-color: #f5f5f7; /* Светлый фон как у Apple */
+    color: #1d1d1f;
     line-height: 1.6;
-    font-weight: 300;
+    font-weight: 400;
 }
 
 .container {
-    max-width: 600px;
+    max-width: 680px;
     margin: 20px auto;
-    padding: 30px 20px;
-    background-color: #2d2d2d; /* Тёмно-серый фон контейнера */
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 /* Заголовки */
@@ -26,35 +26,35 @@ h1, h2, h3 {
 
 h1 {
     margin: 20px 0 10px 0;
-    color: #ffffff;
-    font-size: 28px;
+    color: #1d1d1f;
+    font-size: 32px;
 }
 
 h2 {
-    color: #ffffff;
-    border-bottom: 1px solid #444;
+    color: #1d1d1f;
     padding-bottom: 12px;
     margin-top: 40px;
-    font-size: 22px;
+    font-size: 24px;
 }
 
 h3 {
-    color: #ffffff;
+    color: #1d1d1f;
     margin-top: 0;
+    font-size: 20px;
 }
 
 /* Фото профиля */
 .profile-img {
     width: 120px;
     height: 120px;
-    border-radius: 0%;
+    border-radius: 50%; /* Круглое фото как в Apple */
     object-fit: cover;
-    border: 1px solid #444;
+    border: 1px solid #e0e0e0;
 }
 
 /* Подзаголовок */
 .tagline {
-    color: #a0a0a0;
+    color: #86868b;
     font-size: 1.1em;
     margin: 0;
 }
@@ -62,77 +62,110 @@ h3 {
 /* Блок "Обо мне" */
 .about p {
     text-align: left;
-    color: #c0c0c0;
+    color: #515154;
     line-height: 1.7;
+    font-size: 17px;
 }
 
-/* Блок с ссылками */
-.links {
+/* Кнопки проектов */
+.project-buttons {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.project-btn {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.link-btn {
-    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    background-color: #3a3a3a;
-    color: #ffffff;
-    padding: 16px 20px;
+    flex: 1;
+    min-width: 140px;
+    background-color: #ffffff;
+    color: #1d1d1f;
+    padding: 20px 16px;
     text-decoration: none;
-    border-radius: 0px;
-    font-weight: 400;
+    border-radius: 12px;
+    font-weight: 500;
     transition: all 0.2s ease;
-    border: 1px solid #555;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-.link-btn:hover {
-    background-color: #4a4a4a;
-    transform: scale(1.02);
+.project-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    border-color: #007aff;
 }
 
-.link-btn.small {
-    padding: 10px 15px;
-    font-size: 0.9em;
+.project-btn i {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.project-btn.neon-btn i {
+    color: #ff2d55; /* Красный акцент для НЕ ОН */
+}
+
+.project-btn.solo-btn i {
+    color: #5856d6; /* Фиолетовый акцент для so so */
 }
 
 /* Блок сольного проекта */
 .solo-project {
     display: none;
-    background-color: #333;
+    background-color: #f5f5f7;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 12px;
     margin-top: 20px;
-    border-left: 4px solid #6a5acd;
 }
 
 .solo-links {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     margin-top: 15px;
     flex-wrap: wrap;
+}
+
+/* Обычные кнопки */
+.link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #007aff;
+    color: #ffffff;
+    padding: 12px 18px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.link-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.03);
 }
 
 /* Блок с услугами */
 .services ul {
     padding-left: 20px;
-    color: #c0c0c0;
+    color: #515154;
 }
 
 .services li {
     margin-bottom: 12px;
+    font-size: 17px;
 }
 
 .services strong {
-    color: #ffffff;
+    color: #1d1d1f;
     float: right;
 }
 
 .services a {
-    color: #64b5f6;
+    color: #007aff;
     text-decoration: none;
 }
 
@@ -143,31 +176,48 @@ h3 {
 /* Блок с донатами */
 .donate {
     text-align: center;
-    background-color: #333;
+    background-color: #f5f5f7;
     padding: 25px;
-    border-radius: 8px;
-    border: 1px solid #444;
+    border-radius: 12px;
 }
 
 .donate p {
-    color: #c0c0c0;
+    color: #515154;
+    font-size: 17px;
 }
 
 /* Подвал */
 footer {
     text-align: center;
     margin-top: 50px;
-    color: #888;
+    color: #86868b;
     font-size: 0.9em;
-    border-top: 1px solid #444;
+    border-top: 1px solid #e0e0e0;
     padding-top: 20px;
 }
 
 footer a {
-    color: #64b5f6;
+    color: #007aff;
     text-decoration: none;
 }
 
 footer a:hover {
     text-decoration: underline;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+        margin: 10px;
+        border-radius: 16px;
+    }
+    
+    .project-buttons {
+        flex-direction: column;
+    }
+    
+    .project-btn {
+        min-width: auto;
+    }
 }

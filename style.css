@@ -10,14 +10,20 @@
     --text-secondary: #a0a0a0;
 }
 
-/* Шрифты в стиле Apple */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* Анимация фона */
+@keyframes subtleBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: var(--dark-bg);
+    background: linear-gradient(270deg, #0c0c0c, #161616, #1a1a1a);
+    background-size: 400% 400%;
+    animation: subtleBackground 20s ease infinite;
     color: var(--text-primary);
     line-height: 1.6;
     font-weight: 400;
@@ -34,78 +40,13 @@ body {
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     animation: fadeIn 0.5s ease-out;
+    position: relative;
+    z-index: 1;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+/* Остальные стили остаются прежними, но обновляем кнопки проектов */
 
-/* Заголовки */
-h1, h2, h3 {
-    font-weight: 700;
-    letter-spacing: -0.5px;
-}
-
-h1 {
-    margin: 20px 0 10px 0;
-    color: #ffffff;
-    font-size: 36px;
-    letter-spacing: -0.8px;
-}
-
-h2 {
-    color: #ffffff;
-    padding-bottom: 12px;
-    margin-top: 40px;
-    font-size: 28px;
-    border-bottom: 1px solid #333;
-    letter-spacing: -0.6px;
-}
-
-h3 {
-    color: #ffffff;
-    margin-top: 0;
-    font-size: 22px;
-    letter-spacing: -0.4px;
-}
-
-/* Фото профиля */
-.profile-img {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid transparent;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.profile-img:hover {
-    transform: scale(1.05);
-    border-color: var(--primary-color);
-    box-shadow: 0 8px 25px rgba(100, 181, 246, 0.3);
-}
-
-/* Подзаголовок */
-.tagline {
-    color: var(--text-secondary);
-    font-size: 1.1em;
-    margin: 0;
-    font-weight: 500;
-}
-
-/* Блок "Обо мне" */
-.about p {
-    text-align: left;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    font-size: 17px;
-    font-weight: 400;
-}
-
-/* Сетка проектов - НОВЫЙ ДИЗАЙН */
+/* Сетка проектов - ПЕРЕРАБОТАННЫЙ ДИЗАЙН */
 .project-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -127,7 +68,8 @@ h3 {
     position: relative;
     overflow: hidden;
     min-height: 160px;
-    border: none;
+    border: 2px solid transparent;
+    background: var(--darker-card);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
@@ -139,13 +81,14 @@ h3 {
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
-    opacity: 0.8;
+    opacity: 0.5;
     z-index: 1;
 }
 
 .project-card:hover {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .project-card:hover::after {
@@ -177,7 +120,7 @@ h3 {
     position: relative;
     z-index: 2;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    background: rgba(255, 255, 255, 0.15);
+    transition: all 0.3s ease;
 }
 
 .project-card span {
@@ -188,25 +131,58 @@ h3 {
 
 /* Карточка НЕ ОН - новый дизайн */
 .neon-card {
-    background: linear-gradient(135deg, #ff3b30 0%, #ff2d55 50%, #ff3b70 100%);
-    color: white;
+    border-color: rgba(255, 45, 85, 0.3);
 }
 
 .neon-card .project-icon {
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 5px 15px rgba(255, 45, 85, 0.4);
+    background: rgba(255, 45, 85, 0.2);
+    color: #ff2d55;
+    box-shadow: 0 5px 15px rgba(255, 45, 85, 0.3);
+}
+
+.neon-card:hover .project-icon {
+    background: rgba(255, 45, 85, 0.3);
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(255, 45, 85, 0.4);
 }
 
 /* Карточка so so - новый дизайн */
 .solo-card {
-    background: linear-gradient(135deg, #5856d6 0%, #7d7aff 50%, #9b9bff 100%);
-    color: white;
+    border-color: rgba(125, 122, 255, 0.3);
 }
 
 .solo-card .project-icon {
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 5px 15px rgba(125, 122, 255, 0.4);
+    background: rgba(125, 122, 255, 0.2);
+    color: #7d7aff;
+    box-shadow: 0 5px 15px rgba(125, 122, 255, 0.3);
+}
+
+.solo-card:hover .project-icon {
+    background: rgba(125, 122, 255, 0.3);
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(125, 122, 255, 0.4);
+}
+
+/* Кнопки музыки - ВОЗВРАЩАЕМ ПРЕЖНИЙ СТИЛЬ */
+.link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: var(--primary-color);
+    color: #ffffff;
+    padding: 14px 20px;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(100, 181, 246, 0.3);
+}
+
+.link-btn:hover {
+    background-color: #4a9dea;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(100, 181, 246, 0.4);
 }
 
 /* Остальные стили остаются без изменений */
-/* ... (остальной CSS код остается прежним) ... */

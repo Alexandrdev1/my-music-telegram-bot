@@ -7,7 +7,23 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Стили для вкладок */
+        /* Стиль для кнопки назад вверху */
+        .back-button-top {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--primary-color);
+            font-size: 24px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button-top:hover {
+            transform: translateX(-5px);
+            color: var(--text-primary);
+        }
+        
+        /* Остальные стили без изменений */
         .tabs {
             display: flex;
             border-bottom: 1px solid #333;
@@ -58,7 +74,6 @@
             color: var(--primary-color);
         }
         
-        /* Контакты */
         .contact-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -85,7 +100,6 @@
             font-weight: bold;
         }
         
-        /* Музыка - ВОЗВРАЩАЕМ ПРЕЖНИЙ СТИЛЬ */
         .music-links {
             display: flex;
             gap: 15px;
@@ -110,6 +124,11 @@
 <body>
 
     <div class="container">
+        <!-- Добавлена стрелочка назад вверху -->
+        <a href="index.html" class="back-button-top">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+
         <header>
             <img src="https://raw.githubusercontent.com/sasha461999-blip/my-music-telegram-bot/refs/heads/main/Обложка%20НЕ%20ОН.jpg" alt="Логотип НЕ ОН" class="profile-img">
             <h1>НЕ ОН</h1>

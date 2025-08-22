@@ -1,10 +1,10 @@
-/* Общие стили в стиле Apple (Dark Mode) */
+/* Общие стили в тёмном стиле (не черном) */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #000000; /* Чёрный фон вместо светлого */
-    color: #f5f5f7; /* Светло-серый текст для контраста */
+    background-color: #1a1a1a; /* Тёмный фон, но не черный */
+    color: #e0e0e0;
     line-height: 1.6;
     font-weight: 300;
 }
@@ -13,13 +13,13 @@ body {
     max-width: 600px;
     margin: 20px auto;
     padding: 30px 20px;
-    background-color: #1c1c1e; /* Тёмно-серый фон контейнера */
-    border-radius: 0px; /* Убрали скругления углов для более строгого вида */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    background-color: #2d2d2d; /* Тёмно-серый фон контейнера */
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 /* Заголовки */
-h1, h2 {
+h1, h2, h3 {
     font-weight: 600;
     letter-spacing: -0.5px;
 }
@@ -32,24 +32,29 @@ h1 {
 
 h2 {
     color: #ffffff;
-    border-bottom: 1px solid #3a3a3c;
+    border-bottom: 1px solid #444;
     padding-bottom: 12px;
     margin-top: 40px;
     font-size: 22px;
+}
+
+h3 {
+    color: #ffffff;
+    margin-top: 0;
 }
 
 /* Фото профиля */
 .profile-img {
     width: 120px;
     height: 120px;
-    border-radius: 0%; /* Квадратное фото! */
+    border-radius: 0%;
     object-fit: cover;
-    border: 1px solid #3a3a3c; /* Тонкая серая рамка */
+    border: 1px solid #444;
 }
 
 /* Подзаголовок */
 .tagline {
-    color: #86868b;
+    color: #a0a0a0;
     font-size: 1.1em;
     margin: 0;
 }
@@ -57,15 +62,16 @@ h2 {
 /* Блок "Обо мне" */
 .about p {
     text-align: left;
-    color: #a0a0a0; /* Серый текст для тела */
+    color: #c0c0c0;
     line-height: 1.7;
 }
 
-/* Блок с ссылками (КВАДРАТНЫЕ КНОПКИ) */
+/* Блок с ссылками */
 .links {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    margin-bottom: 20px;
 }
 
 .link-btn {
@@ -73,25 +79,47 @@ h2 {
     align-items: center;
     justify-content: center;
     gap: 12px;
-    background-color: #2c2c2e; /* Тёмный фон кнопки */
+    background-color: #3a3a3a;
     color: #ffffff;
     padding: 16px 20px;
     text-decoration: none;
-    border-radius: 0px; /* Убрали скругление - теперь кнопки квадратные */
+    border-radius: 0px;
     font-weight: 400;
     transition: all 0.2s ease;
-    border: 1px solid #3a3a3c; /* Граница как у Apple */
+    border: 1px solid #555;
 }
 
 .link-btn:hover {
-    background-color: #3a3a3c; /* Эффект при наведении */
+    background-color: #4a4a4a;
     transform: scale(1.02);
+}
+
+.link-btn.small {
+    padding: 10px 15px;
+    font-size: 0.9em;
+}
+
+/* Блок сольного проекта */
+.solo-project {
+    display: none;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border-left: 4px solid #6a5acd;
+}
+
+.solo-links {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    flex-wrap: wrap;
 }
 
 /* Блок с услугами */
 .services ul {
     padding-left: 20px;
-    color: #a0a0a0;
+    color: #c0c0c0;
 }
 
 .services li {
@@ -104,7 +132,7 @@ h2 {
 }
 
 .services a {
-    color: #0a84ff; /* Классический синий Apple для ссылок */
+    color: #64b5f6;
     text-decoration: none;
 }
 
@@ -115,28 +143,28 @@ h2 {
 /* Блок с донатами */
 .donate {
     text-align: center;
-    background-color: #2c2c2e;
+    background-color: #333;
     padding: 25px;
-    border-radius: 0px; /* Квадратный блок */
-    border: 1px solid #3a3a3c;
+    border-radius: 8px;
+    border: 1px solid #444;
 }
 
 .donate p {
-    color: #a0a0a0;
+    color: #c0c0c0;
 }
 
 /* Подвал */
 footer {
     text-align: center;
     margin-top: 50px;
-    color: #6e6e73;
+    color: #888;
     font-size: 0.9em;
-    border-top: 1px solid #3a3a3c;
+    border-top: 1px solid #444;
     padding-top: 20px;
 }
 
 footer a {
-    color: #0a84ff;
+    color: #64b5f6;
     text-decoration: none;
 }
 

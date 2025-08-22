@@ -13,7 +13,7 @@
         <header>
             <img src="https://raw.githubusercontent.com/sasha461999-blip/my-music-telegram-bot/refs/heads/main/Обложка.jpg" alt="Абрамов Александр" class="profile-img">
             <h1>Абрамов Александр</h1>
-            <p class="tagline">Гитарист, основатель группы НЕ ОН</p>
+            <p class="tagline">Музыкант</p> <!-- Изменено -->
         </header>
 
         <section class="about">
@@ -23,18 +23,22 @@
 
         <section class="music">
             <h2>Проекты</h2>
-            <div class="project-buttons">
-                <a href="neon.html" class="project-btn neon-btn">
-                    <i class="fas fa-users"></i>
+            <div class="project-grid"> <!-- Новый контейнер -->
+                <a href="neon.html" class="project-card neon-card">
+                    <div class="project-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
                     <span>НЕ ОН</span>
                 </a>
-                <a href="#solo" class="project-btn solo-btn">
-                    <i class="fas fa-user"></i>
+                <a href="#solo" class="project-card solo-card">
+                    <div class="project-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
                     <span>so so</span>
                 </a>
             </div>
             
-            <!-- Сольный проект (изначально скрыт) -->
+            <!-- Сольный проект -->
             <div id="solo" class="solo-project">
                 <h3>so so</h3>
                 <p>Сольный проект</p>
@@ -45,6 +49,7 @@
             </div>
         </section>
 
+        <!-- Остальные секции без изменений -->
         <section class="services">
             <h2>Услуги</h2>
             <ul>
@@ -68,12 +73,11 @@
 
     <script>
         // Показ/скрытие информации о сольном проекте
-        document.querySelector('.solo-btn').addEventListener('click', function(e) {
+        document.querySelector('.solo-card').addEventListener('click', function(e) {
             e.preventDefault();
             const soloSection = document.getElementById('solo');
             soloSection.style.display = soloSection.style.display === 'block' ? 'none' : 'block';
             
-            // Плавная прокрутка к открытому разделу
             if (soloSection.style.display === 'block') {
                 soloSection.scrollIntoView({ behavior: 'smooth' });
             }

@@ -11,9 +11,9 @@
 
     <div class="container">
         <header>
-            <img src="https://raw.githubusercontent.com/sasha461999-blip/my-music-telegram-bot/refs/heads/main/Обложка.jpg" alt="Абрамов Александр" class="profile-img">
+            <img src="https://raw.githubusercontent.com/sasha461999-blip/my-music-telegram-bot/refs/heads/main/Обложка.jpg" alt="Абрамов Александр" class="profile-img" id="profileImage">
             <h1>Абрамов Александр</h1>
-            <p class="tagline">Музыкант</p> <!-- Изменено -->
+            <p class="tagline">Музыкант</p>
         </header>
 
         <section class="about">
@@ -23,22 +23,23 @@
 
         <section class="music">
             <h2>Проекты</h2>
-            <div class="project-grid"> <!-- Новый контейнер -->
+            <div class="project-grid">
                 <a href="neon.html" class="project-card neon-card">
                     <div class="project-icon">
                         <i class="fas fa-users"></i>
                     </div>
                     <span>НЕ ОН</span>
+                    <div class="project-hover-effect"></div>
                 </a>
                 <a href="#solo" class="project-card solo-card">
                     <div class="project-icon">
                         <i class="fas fa-user"></i>
                     </div>
                     <span>so so</span>
+                    <div class="project-hover-effect"></div>
                 </a>
             </div>
             
-            <!-- Сольный проект -->
             <div id="solo" class="solo-project">
                 <h3>so so</h3>
                 <p>Сольный проект</p>
@@ -49,7 +50,6 @@
             </div>
         </section>
 
-        <!-- Остальные секции без изменений -->
         <section class="services">
             <h2>Услуги</h2>
             <ul>
@@ -71,17 +71,51 @@
         </footer>
     </div>
 
+    <!-- Модальное окно для фото -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
     <script>
         // Показ/скрытие информации о сольном проекте
         document.querySelector('.solo-card').addEventListener('click', function(e) {
             e.preventDefault();
             const soloSection = document.getElementById('solo');
-            soloSection.style.display = soloSection.style.display === 'block' ? 'none' : 'block';
+            const isHidden = soloSection.style.display !== 'block';
             
-            if (soloSection.style.display === 'block') {
-                soloSection.scrollIntoView({ behavior: 'smooth' });
+            soloSection.style.display = isHidden ? 'block' : 'none';
+            
+            if (isHidden) {
+                setTimeout(() => {
+                    soloSection.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
             }
         });
+
+        // Модальное окно для фото
+        const modal = document.getElementById("imageModal");
+        const img = document.getElementById("profileImage");
+        const modalImg = document.getElementById("modalImage");
+        const span = document.getElementsByClassName("close")[0];
+
+        img.onclick = function() {
+            modal.style.display = "block";
+            modalImg.src = this.src;
+            document.body.style.overflow = "hidden";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        }
     </script>
 
 </body>

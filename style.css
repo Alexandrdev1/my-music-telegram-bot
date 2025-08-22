@@ -1,21 +1,39 @@
-/* Общие стили в стиле Apple */
+/* Тёмная тема с цветными акцентами */
+:root {
+    --neon-color: #ff2d55;
+    --solo-color: #7d7aff;
+    --primary-color: #64b5f6;
+    --dark-bg: #121212;
+    --dark-card: #1e1e1e;
+    --darker-card: #1a1a1a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f5f5f7;
-    color: #1d1d1f;
+    background-color: var(--dark-bg);
+    color: var(--text-primary);
     line-height: 1.6;
     font-weight: 400;
+    transition: background-color 0.3s ease;
 }
 
 .container {
     max-width: 680px;
     margin: 20px auto;
     padding: 30px;
-    background-color: #ffffff;
+    background-color: var(--dark-card);
     border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Заголовки */
@@ -26,35 +44,45 @@ h1, h2, h3 {
 
 h1 {
     margin: 20px 0 10px 0;
-    color: #1d1d1f;
+    color: #ffffff;
     font-size: 32px;
 }
 
 h2 {
-    color: #1d1d1f;
+    color: #ffffff;
     padding-bottom: 12px;
     margin-top: 40px;
     font-size: 24px;
+    border-bottom: 1px solid #333;
 }
 
 h3 {
-    color: #1d1d1f;
+    color: #ffffff;
     margin-top: 0;
     font-size: 20px;
 }
 
 /* Фото профиля */
 .profile-img {
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     object-fit: cover;
-    border: 1px solid #e0e0e0;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.profile-img:hover {
+    transform: scale(1.05);
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 25px rgba(100, 181, 246, 0.3);
 }
 
 /* Подзаголовок */
 .tagline {
-    color: #86868b;
+    color: var(--text-secondary);
     font-size: 1.1em;
     margin: 0;
 }
@@ -62,7 +90,7 @@ h3 {
 /* Блок "Обо мне" */
 .about p {
     text-align: left;
-    color: #515154;
+    color: var(--text-secondary);
     line-height: 1.7;
     font-size: 17px;
 }
@@ -80,65 +108,110 @@ h3 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 25px 15px;
+    padding: 30px 20px;
     text-decoration: none;
     border-radius: 16px;
     font-weight: 600;
     font-size: 18px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    min-height: 140px;
+    position: relative;
+    overflow: hidden;
+    min-height: 160px;
+    border: 1px solid transparent;
 }
 
 .project-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+.project-card:hover .project-hover-effect {
+    opacity: 1;
+    transform: scale(1.5);
+}
+
+.project-hover-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    opacity: 0;
+    transition: all 0.5s ease;
+    z-index: 1;
 }
 
 .project-icon {
     font-size: 32px;
-    margin-bottom: 12px;
-    width: 60px;
-    height: 60px;
+    margin-bottom: 15px;
+    width: 70px;
+    height: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 14px;
+    border-radius: 18px;
+    position: relative;
+    z-index: 2;
+}
+
+.project-card span {
+    position: relative;
+    z-index: 2;
 }
 
 /* Карточка НЕ ОН */
 .neon-card {
     background: linear-gradient(135deg, #ff3b30 0%, #ff2d55 100%);
     color: white;
+    box-shadow: 0 10px 20px rgba(255, 45, 85, 0.25);
 }
 
 .neon-card .project-icon {
     background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 5px 15px rgba(255, 45, 85, 0.3);
+}
+
+.neon-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Карточка so so */
 .solo-card {
     background: linear-gradient(135deg, #5856d6 0%, #7d7aff 100%);
     color: white;
+    box-shadow: 0 10px 20px rgba(125, 122, 255, 0.25);
 }
 
 .solo-card .project-icon {
     background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 5px 15px rgba(125, 122, 255, 0.3);
+}
+
+.solo-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Блок сольного проекта */
 .solo-project {
     display: none;
-    background-color: #f5f5f7;
-    padding: 20px;
-    border-radius: 12px;
+    background-color: var(--darker-card);
+    padding: 25px;
+    border-radius: 16px;
     margin-top: 20px;
+    border-left: 4px solid var(--solo-color);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; max-height: 0; }
+    to { opacity: 1; max-height: 300px; }
 }
 
 .solo-links {
     display: flex;
-    gap: 12px;
-    margin-top: 15px;
+    gap: 15px;
+    margin-top: 20px;
     flex-wrap: wrap;
 }
 
@@ -147,25 +220,27 @@ h3 {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    background-color: #007aff;
+    gap: 10px;
+    background-color: var(--primary-color);
     color: #ffffff;
-    padding: 12px 18px;
+    padding: 14px 20px;
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 500;
     transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(100, 181, 246, 0.3);
 }
 
 .link-btn:hover {
-    background-color: #0056b3;
-    transform: scale(1.03);
+    background-color: #4a9dea;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(100, 181, 246, 0.4);
 }
 
 /* Блок с услугами */
 .services ul {
     padding-left: 20px;
-    color: #515154;
+    color: var(--text-secondary);
 }
 
 .services li {
@@ -174,12 +249,12 @@ h3 {
 }
 
 .services strong {
-    color: #1d1d1f;
+    color: #ffffff;
     float: right;
 }
 
 .services a {
-    color: #007aff;
+    color: var(--primary-color);
     text-decoration: none;
 }
 
@@ -190,13 +265,14 @@ h3 {
 /* Блок с донатами */
 .donate {
     text-align: center;
-    background-color: #f5f5f7;
-    padding: 25px;
-    border-radius: 12px;
+    background-color: var(--darker-card);
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid #333;
 }
 
 .donate p {
-    color: #515154;
+    color: var(--text-secondary);
     font-size: 17px;
 }
 
@@ -204,19 +280,66 @@ h3 {
 footer {
     text-align: center;
     margin-top: 50px;
-    color: #86868b;
+    color: var(--text-secondary);
     font-size: 0.9em;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid #333;
     padding-top: 20px;
 }
 
 footer a {
-    color: #007aff;
+    color: var(--primary-color);
     text-decoration: none;
 }
 
 footer a:hover {
     text-decoration: underline;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    padding-top: 50px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.9);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+    animation: zoom 0.3s ease;
+}
+
+@keyframes zoom {
+    from {transform:scale(0.9)}
+    to {transform:scale(1)}
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
 }
 
 /* Адаптивность для мобильных */
@@ -229,5 +352,13 @@ footer a:hover {
     
     .project-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .solo-links {
+        flex-direction: column;
+    }
+    
+    .modal-content {
+        width: 95%;
     }
 }

@@ -1,8 +1,8 @@
-/* Тёмная тема с цветными акцентами */
+/* Тёмная тема с приглушёнными цветами */
 :root {
-    --neon-color: #ff2d55;
-    --solo-color: #7d7aff;
-    --primary-color: #64b5f6;
+    --neon-color: #ff6b6b; /* Приглушённый красный */
+    --solo-color: #9b87f5; /* Приглушённый фиолетовый */
+    --primary-color: #6cbbf2; /* Приглушённый синий */
     --dark-bg: #121212;
     --dark-card: #1e1e1e;
     --darker-card: #1a1a1a;
@@ -44,9 +44,71 @@ body {
     z-index: 1;
 }
 
-/* Остальные стили остаются прежними, но обновляем кнопки проектов */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-/* Сетка проектов - ПЕРЕРАБОТАННЫЙ ДИЗАЙН */
+/* Заголовки */
+h1, h2, h3 {
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+h1 {
+    margin: 20px 0 10px 0;
+    color: #ffffff;
+    font-size: 32px;
+}
+
+h2 {
+    color: #ffffff;
+    padding-bottom: 12px;
+    margin-top: 40px;
+    font-size: 24px;
+    border-bottom: 1px solid #333;
+}
+
+h3 {
+    color: #ffffff;
+    margin-top: 0;
+    font-size: 20px;
+}
+
+/* Фото профиля - ВЕРНУЛИ РАЗМЕР */
+.profile-img {
+    width: 120px; /* Вернули исходный размер */
+    height: 120px; /* Вернули исходный размер */
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.profile-img:hover {
+    transform: scale(1.05);
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 25px rgba(108, 187, 242, 0.3);
+}
+
+/* Подзаголовок */
+.tagline {
+    color: var(--text-secondary);
+    font-size: 1.1em;
+    margin: 0;
+}
+
+/* Блок "Обо мне" */
+.about p {
+    text-align: left;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 17px;
+}
+
+/* Сетка проектов */
 .project-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -59,111 +121,95 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 30px 20px;
+    padding: 25px 15px;
     text-decoration: none;
-    border-radius: 18px;
-    font-weight: 700;
-    font-size: 20px;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border-radius: 16px;
+    font-weight: 600;
+    font-size: 18px;
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    min-height: 160px;
-    border: 2px solid transparent;
+    min-height: 140px;
     background: var(--darker-card);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.project-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
-    opacity: 0.5;
-    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .project-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.1);
-}
-
-.project-card:hover::after {
-    opacity: 1;
-}
-
-.project-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 1;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .project-icon {
-    font-size: 36px;
-    margin-bottom: 15px;
-    width: 70px;
-    height: 70px;
+    font-size: 32px;
+    margin-bottom: 12px;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 18px;
+    border-radius: 16px;
     position: relative;
     z-index: 2;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
 }
 
 .project-card span {
     position: relative;
     z-index: 2;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Карточка НЕ ОН - новый дизайн */
-.neon-card {
-    border-color: rgba(255, 45, 85, 0.3);
-}
-
+/* Карточка НЕ ОН - приглушённые цвета */
 .neon-card .project-icon {
-    background: rgba(255, 45, 85, 0.2);
-    color: #ff2d55;
-    box-shadow: 0 5px 15px rgba(255, 45, 85, 0.3);
+    background: rgba(255, 107, 107, 0.15);
+    color: #ff6b6b;
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.2);
 }
 
 .neon-card:hover .project-icon {
-    background: rgba(255, 45, 85, 0.3);
+    background: rgba(255, 107, 107, 0.25);
     transform: scale(1.1);
-    box-shadow: 0 8px 20px rgba(255, 45, 85, 0.4);
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
 }
 
-/* Карточка so so - новый дизайн */
-.solo-card {
-    border-color: rgba(125, 122, 255, 0.3);
-}
-
+/* Карточка so so - приглушённые цвета */
 .solo-card .project-icon {
-    background: rgba(125, 122, 255, 0.2);
-    color: #7d7aff;
-    box-shadow: 0 5px 15px rgba(125, 122, 255, 0.3);
+    background: rgba(155, 135, 245, 0.15);
+    color: #9b87f5;
+    box-shadow: 0 5px 15px rgba(155, 135, 245, 0.2);
 }
 
 .solo-card:hover .project-icon {
-    background: rgba(125, 122, 255, 0.3);
+    background: rgba(155, 135, 245, 0.25);
     transform: scale(1.1);
-    box-shadow: 0 8px 20px rgba(125, 122, 255, 0.4);
+    box-shadow: 0 8px 20px rgba(155, 135, 245, 0.3);
 }
 
-/* Кнопки музыки - ВОЗВРАЩАЕМ ПРЕЖНИЙ СТИЛЬ */
+/* Блок сольного проекта - СКРЫТ ПО УМОЛЧАНИЮ */
+.solo-project {
+    display: none; /* Скрыт по умолчанию */
+    background-color: var(--darker-card);
+    padding: 25px;
+    border-radius: 16px;
+    margin-top: 20px;
+    border-left: 4px solid var(--solo-color);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; max-height: 0; padding: 0 25px; }
+    to { opacity: 1; max-height: 300px; padding: 25px; }
+}
+
+.solo-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+/* Обычные кнопки */
 .link-btn {
     display: flex;
     align-items: center;
@@ -176,13 +222,137 @@ body {
     border-radius: 10px;
     font-weight: 500;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 10px rgba(100, 181, 246, 0.3);
+    box-shadow: 0 4px 10px rgba(108, 187, 242, 0.3);
 }
 
 .link-btn:hover {
-    background-color: #4a9dea;
+    background-color: #5aa9e6;
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(100, 181, 246, 0.4);
+    box-shadow: 0 6px 15px rgba(108, 187, 242, 0.4);
 }
 
-/* Остальные стили остаются без изменений */
+/* Блок с услугами */
+.services ul {
+    padding-left: 20px;
+    color: var(--text-secondary);
+}
+
+.services li {
+    margin-bottom: 12px;
+    font-size: 17px;
+}
+
+.services strong {
+    color: #ffffff;
+    float: right;
+}
+
+.services a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.services a:hover {
+    text-decoration: underline;
+}
+
+/* Блок с донатами */
+.donate {
+    text-align: center;
+    background-color: var(--darker-card);
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.donate p {
+    color: var(--text-secondary);
+    font-size: 17px;
+}
+
+/* Подвал */
+footer {
+    text-align: center;
+    margin-top: 50px;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+}
+
+footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    padding-top: 50px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.9);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+    animation: zoom 0.3s ease;
+}
+
+@keyframes zoom {
+    from {transform:scale(0.9)}
+    to {transform:scale(1)}
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+        margin: 10px;
+        border-radius: 16px;
+    }
+    
+    .project-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .solo-links {
+        flex-direction: column;
+    }
+    
+    .modal-content {
+        width: 95%;
+    }
+}

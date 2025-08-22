@@ -29,17 +29,16 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <span>НЕ ОН</span>
-                    <div class="project-hover-effect"></div>
                 </a>
-                <a href="#solo" class="project-card solo-card">
+                <a href="#solo" class="project-card solo-card" id="soloBtn">
                     <div class="project-icon">
                         <i class="fas fa-user"></i>
                     </div>
                     <span>so so</span>
-                    <div class="project-hover-effect"></div>
                 </a>
             </div>
             
+            <!-- Сольный проект - СКРЫТ ПО УМОЛЧАНИЮ -->
             <div id="solo" class="solo-project">
                 <h3>so so</h3>
                 <p>Сольный проект</p>
@@ -79,7 +78,7 @@
 
     <script>
         // Показ/скрытие информации о сольном проекте
-        document.querySelector('.solo-card').addEventListener('click', function(e) {
+        document.getElementById('soloBtn').addEventListener('click', function(e) {
             e.preventDefault();
             const soloSection = document.getElementById('solo');
             const isHidden = soloSection.style.display !== 'block';

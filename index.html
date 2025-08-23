@@ -11,9 +11,10 @@
         .game-section {
             margin: 40px 0;
             padding: 20px;
-            background-color: #f5f5f7;
+            background-color: #2d2d2d;
             border-radius: 12px;
             text-align: center;
+            color: #fff;
         }
         
         .game-container {
@@ -23,9 +24,9 @@
         }
         
         #gameCanvas {
-            border: 2px solid #333;
+            border: 2px solid #555;
             border-radius: 8px;
-            background: #cceeff;
+            background: #1a1a1a;
             margin: 0 auto;
             display: block;
             max-width: 100%;
@@ -51,11 +52,20 @@
             margin-top: 10px;
             font-size: 18px;
             font-weight: bold;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
         }
         
         .game-instruction {
             margin-top: 10px;
-            color: #666;
+            color: #ccc;
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
     </style>
 </head>
@@ -125,7 +135,9 @@
                 <button id="playBtn">▶ Играть</button>
             </div>
             <div class="game-stats">
-                Счёт: <span id="score">0</span> | Рекорд: <span id="highScore">0</span>
+                <div class="stat"><i class="fas fa-clock"></i> Время: <span id="score">0</span></div>
+                <div class="stat"><i class="fas fa-coins"></i> Монеты: <span id="coins">0</span></div>
+                <div class="stat"><i class="fas fa-trophy"></i> Рекорд: <span id="highScore">0</span></div>
             </div>
             <p class="game-instruction">Нажми ПРОБЕЛ или кликни, чтобы прыгнуть</p>
         </section>
@@ -187,14 +199,18 @@
             const ctx = canvas.getContext('2d');
             const playBtn = document.getElementById('playBtn');
             const scoreEl = document.getElementById('score');
+            const coinsEl = document.getElementById('coins');
             const highScoreEl = document.getElementById('highScore');
             
             // Загрузка изображений
             const catImg = new Image();
             const cactusImg = new Image();
+            const coinImg = new Image();
             
+            // Правильные пути к изображениям
             catImg.src = 'https://i.ibb.co/xDZwXHY/cat.png';
             cactusImg.src = 'https://i.ibb.co/6JRbhzx/cactus.png';
+            coinImg.src = 'https://i.ibb.co/5sUHJ7S/coin.png'; // Замените на свою монетку
             
             // Настройка размеров canvas
             function resizeCanvas() {
@@ -210,6 +226,7 @@
             // Игровые переменные
             let gameRunning = false;
             let score = 0;
+            let coinsCount = 0;
             let highScore = 0;
             let gameSpeed = 5;
             let frameCount = 0;
@@ -218,8 +235,8 @@
             const cat = {
                 x: 50,
                 y: 150,
-                width: 40,
-                height: 40,
+                width: 64,
+                height: 64,
                 velocity: 0,
                 gravity: 0.8,
                 jumpStrength: -15,
@@ -255,14 +272,15 @@
                 }
             };
             
-            // Массив препятствий
+            // Массивы объектов
             let obstacles = [];
+            let coins = [];
             
             // Класс препятствия
             class Obstacle {
                 constructor() {
-                    this.width = 30;
-                    this.height = 50;
+                    this.width = 64;
+                    this.height = 64;
                     this.x = canvas.width;
                     this.y = 150;
                     this.speed = gameSpeed;
@@ -294,19 +312,66 @@
                 }
             }
             
+            // Класс монетки
+            class Coin {
+                constructor() {
+                    this.width = 32;
+                    this.height = 32;
+                    this.x = canvas.width;
+                    this.y = 80 + Math.random() * 70;
+                    this.speed = gameSpeed;
+                    this.collected = false;
+                }
+                
+                update() {
+                    this.x -= this.speed;
+                }
+                
+                draw() {
+                    if (!this.collected) {
+                        if (coinImg.complete) {
+                            ctx.drawImage(coinImg, this.x, this.y, this.width, this.height);
+                        } else {
+                            // Запасной вариант
+                            ctx.fillStyle = '#FFD700';
+                            ctx.beginPath();
+                            ctx.arc(this.x + this.width/2, this.y + this.height/2, this.width/2, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
+                }
+                
+                isOffscreen() {
+                    return this.x + this.width < 0;
+                }
+                
+                collidesWith(obj) {
+                    if (this.collected) return false;
+                    
+                    const dx = this.x + this.width/2 - (obj.x + obj.width/2);
+                    const dy = this.y + this.height/2 - (obj.y + obj.height/2);
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    return distance < (this.width/2 + obj.width/2) * 0.7;
+                }
+            }
+            
             // Функция сброса игры
             function resetGame() {
                 gameRunning = true;
                 score = 0;
+                coinsCount = 0;
                 gameSpeed = 5;
                 frameCount = 0;
                 obstacles = [];
+                coins = [];
                 
                 cat.y = 150;
                 cat.velocity = 0;
                 cat.isJumping = false;
                 
                 scoreEl.textContent = '0';
+                coinsEl.textContent = '0';
                 playBtn.style.display = 'none';
             }
             
@@ -329,10 +394,10 @@
                 // Очистка canvas
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                // Рисуем фон
-                ctx.fillStyle = '#cceeff';
+                // Рисуем фон (темный)
+                ctx.fillStyle = '#2c3e50';
                 ctx.fillRect(0, 0, canvas.width, canvas.height * 0.75);
-                ctx.fillStyle = '#88cc88';
+                ctx.fillStyle = '#34495e';
                 ctx.fillRect(0, canvas.height * 0.75, canvas.width, canvas.height * 0.25);
                 
                 // Обновление и отрисовка кота
@@ -342,6 +407,11 @@
                 // Генерация препятствий
                 if (frameCount % 100 === 0) {
                     obstacles.push(new Obstacle());
+                }
+                
+                // Генерация монеток
+                if (frameCount % 120 === 0 && Math.random() > 0.5) {
+                    coins.push(new Coin());
                 }
                 
                 // Обновление и отрисовка препятствий
@@ -358,14 +428,37 @@
                     // Удаление вышедших за границы препятствий
                     if (obstacles[i].isOffscreen()) {
                         obstacles.splice(i, 1);
-                        score++;
-                        scoreEl.textContent = score;
-                        
-                        // Увеличиваем скорость каждые 5 очков
-                        if (score % 5 === 0) {
-                            gameSpeed += 0.5;
-                        }
                     }
+                }
+                
+                // Обновление и отрисовка монеток
+                for (let i = coins.length - 1; i >= 0; i--) {
+                    coins[i].update();
+                    coins[i].draw();
+                    
+                    // Проверка сбора монеток
+                    if (coins[i].collidesWith(cat)) {
+                        coins[i].collected = true;
+                        coinsCount++;
+                        coinsEl.textContent = coinsCount;
+                        coins.splice(i, 1);
+                    }
+                    
+                    // Удаление вышедших за границы монеток
+                    else if (coins[i].isOffscreen()) {
+                        coins.splice(i, 1);
+                    }
+                }
+                
+                // Увеличение скорости со временем
+                if (frameCount % 500 === 0) {
+                    gameSpeed += 0.5;
+                }
+                
+                // Обновление счета (времени)
+                if (frameCount % 60 === 0) {
+                    score++;
+                    scoreEl.textContent = score;
                 }
                 
                 frameCount++;
@@ -394,6 +487,13 @@
             canvas.addEventListener('click', function() {
                 if (gameRunning) {
                     cat.jump();
+                }
+            });
+            
+            canvas.addEventListener('touchstart', function(e) {
+                if (gameRunning) {
+                    cat.jump();
+                    e.preventDefault();
                 }
             });
         });

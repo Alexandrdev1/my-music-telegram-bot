@@ -19,6 +19,8 @@
             margin: 0 auto;
             border-radius: 10px;
             max-width: 100%;
+            background: #cceeff;
+            border: 2px solid #333;
         }
         #playBtn {
             position: absolute;
@@ -34,11 +36,80 @@
             border-radius: 10px;
             cursor: pointer;
             z-index: 10;
+            transition: all 0.3s ease;
+        }
+        #playBtn:hover {
+            background: #ff8800;
+            transform: translate(-50%, -50%) scale(1.05);
         }
         .game-stats {
             margin-top: 8px;
             font-size: 18px;
             font-weight: bold;
+            text-align: center;
+        }
+        
+        /* Общие стили для остального контента */
+        .container {
+            max-width: 680px;
+            margin: 20px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .project-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px 15px;
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-height: 140px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .solo-project {
+            display: none;
+            background-color: #f5f5f7;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        
+        .link-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: #007aff;
+            color: #ffffff;
+            padding: 12px 18px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
     </style>
 </head>
@@ -98,13 +169,13 @@
     <section class="game">
         <h2>Мини игра - Дикий кот</h2>
         <div class="game-container" id="gameContainer">
-            <canvas id="gameCanvas"></canvas>
+            <canvas id="gameCanvas" width="600" height="200"></canvas>
             <button id="playBtn">▶ Play</button>
         </div>
         <div class="game-stats">
             Время: <span id="time">0</span> сек | Монетки: <span id="coins">0</span>
         </div>
-        <p style="text-align:center">Тапни по экрану, чтобы прыгнуть 🐱</p>
+        <p style="text-align:center">Нажми Пробел или кликни, чтобы прыгнуть 🐱</p>
     </section>
 
     <footer>
@@ -113,103 +184,320 @@
 </div>
 
 <script>
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-const playBtn = document.getElementById("playBtn");
-const timeEl = document.getElementById("time");
-const coinsEl = document.getElementById("coins");
+// ========== ПЕРЕПИСАННАЯ ИГРА С НУЛЯ ==========
 
-let cw, ch, scale;
-let cat = new Image();
-let cactus = new Image();
-cat.src = "cat.png";
-cactus.src = "cactus.png";
-
-let catObj, obstacles=[], coins=[], speed, frame, timer, coinCount;
-let gameRunning=false;
-
-function resize(){
-    cw = Math.min(window.innerWidth-16,600);
-    ch = Math.floor(cw/3);
-    scale = cw/600;
-    canvas.width = cw;
-    canvas.height = ch;
-}
-window.addEventListener('resize',resize);
-resize();
-
-function resetGame(){
-    catObj = {x:50*scale, y:ch-64*scale-10*scale, w:64*scale, h:64*scale, vy:0, gravity:0.7*scale, jump:-12*scale, grounded:true};
-    obstacles=[]; coins=[]; speed=6*scale; frame=0; timer=0; coinCount=0;
-    timeEl.textContent='0'; coinsEl.textContent='0'; gameRunning=true; playBtn.style.display='none';
-}
-
-function spawnObstacle(){
-    let last = obstacles.length>0?obstacles[obstacles.length-1].x:cw;
-    let gap = 150*scale+Math.random()*150*scale;
-    obstacles.push({x:last+gap, y:ch-64*scale-10*scale, w:64*scale, h:64*scale});
-}
-
-function spawnCoin(){
-    let last = coins.length>0?coins[coins.length-1].x:cw;
-    let gap = 100*scale + Math.random()*150*scale;
-    let height = ch-100*scale - Math.random()*50*scale;
-    coins.push({x:last+gap, y:height, r:14*scale});
-}
-
-function update(){
-    if(!gameRunning) return;
-    catObj.vy += catObj.gravity;
-    catObj.y += catObj.vy;
-    if(catObj.y>=ch-64*scale-10*scale){catObj.y=ch-64*scale-10*scale; catObj.vy=0; catObj.grounded=true;} else catObj.grounded=false;
-    obstacles.forEach(o=>o.x-=speed);
-    coins.forEach(c=>c.x-=speed);
-
-    for(let o of obstacles){
-        if(catObj.x<o.x+o.w && catObj.x+catObj.w>o.x && catObj.y<o.y+o.h && catObj.y+catObj.h>o.y){
-            gameRunning=false; playBtn.style.display='block'; playBtn.textContent='Играть снова';
+document.addEventListener('DOMContentLoaded', function() {
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const playBtn = document.getElementById('playBtn');
+    const timeEl = document.getElementById('time');
+    const coinsEl = document.getElementById('coins');
+    
+    // Настройка размеров canvas
+    function resizeCanvas() {
+        const container = document.getElementById('gameContainer');
+        const maxWidth = Math.min(container.clientWidth, 600);
+        canvas.width = maxWidth;
+        canvas.height = 200;
+    }
+    
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    
+    // Загрузка изображений
+    const catImg = new Image();
+    const cactusImg = new Image();
+    const coinImg = new Image();
+    
+    catImg.src = 'https://i.ibb.co/xDZwXHY/cat.png';
+    cactusImg.src = 'https://i.ibb.co/6JRbhzx/cactus.png';
+    coinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Emoji_u1f4b0.svg';
+    
+    // Игровые переменные
+    let gameRunning = false;
+    let gameSpeed = 5;
+    let score = 0;
+    let coins = 0;
+    let frameCount = 0;
+    let lastObstacleTime = 0;
+    let lastCoinTime = 0;
+    
+    // Объект кота
+    const cat = {
+        x: 50,
+        y: 150,
+        width: 40,
+        height: 40,
+        velocity: 0,
+        gravity: 0.8,
+        jumpStrength: -15,
+        isJumping: false,
+        
+        update: function() {
+            this.velocity += this.gravity;
+            this.y += this.velocity;
+            
+            // Проверка земли
+            if (this.y > 150) {
+                this.y = 150;
+                this.velocity = 0;
+                this.isJumping = false;
+            }
+        },
+        
+        jump: function() {
+            if (!this.isJumping) {
+                this.velocity = this.jumpStrength;
+                this.isJumping = true;
+            }
+        },
+        
+        draw: function() {
+            if (catImg.complete) {
+                ctx.drawImage(catImg, this.x, this.y, this.width, this.height);
+            } else {
+                // Запасной вариант, если изображение не загрузилось
+                ctx.fillStyle = '#ff6b6b';
+                ctx.fillRect(this.x, this.y, this.width, this.height);
+            }
+        }
+    };
+    
+    // Массивы объектов
+    let obstacles = [];
+    let coinItems = [];
+    
+    // Класс препятствия
+    class Obstacle {
+        constructor() {
+            this.width = 30;
+            this.height = 50;
+            this.x = canvas.width;
+            this.y = 150;
+            this.speed = gameSpeed;
+            
+            // Случайное расстояние до следующего препятствия (от 250 до 500px)
+            this.nextGap = 250 + Math.random() * 250;
+        }
+        
+        update() {
+            this.x -= this.speed;
+        }
+        
+        draw() {
+            if (cactusImg.complete) {
+                ctx.drawImage(cactusImg, this.x, this.y - this.height + 10, this.width, this.height);
+            } else {
+                // Запасной вариант
+                ctx.fillStyle = '#2ecc71';
+                ctx.fillRect(this.x, this.y - this.height + 10, this.width, this.height);
+            }
+        }
+        
+        isOffscreen() {
+            return this.x + this.width < 0;
+        }
+        
+        collidesWith(obj) {
+            return this.x < obj.x + obj.width &&
+                   this.x + this.width > obj.x &&
+                   this.y - this.height + 10 < obj.y + obj.height &&
+                   this.y + 10 > obj.y;
         }
     }
-
-    for(let i=coins.length-1;i>=0;i--){
-        let c=coins[i];
-        if(catObj.x< c.x+c.r && catObj.x+catObj.w>c.x-c.r && catObj.y< c.y+c.r && catObj.y+catObj.h>c.y-c.r){
-            coinCount++; coins.splice(i,1); coinsEl.textContent=coinCount;
+    
+    // Класс монетки
+    class Coin {
+        constructor() {
+            this.radius = 10;
+            this.x = canvas.width;
+            this.y = 100 + Math.random() * 50;
+            this.speed = gameSpeed;
+            this.collected = false;
+        }
+        
+        update() {
+            this.x -= this.speed;
+        }
+        
+        draw() {
+            if (!this.collected) {
+                if (coinImg.complete) {
+                    ctx.drawImage(coinImg, this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
+                } else {
+                    // Запасной вариант
+                    ctx.fillStyle = '#FFD700';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+        
+        isOffscreen() {
+            return this.x + this.radius < 0;
+        }
+        
+        collidesWith(obj) {
+            if (this.collected) return false;
+            
+            const dx = this.x - (obj.x + obj.width/2);
+            const dy = this.y - (obj.y + obj.height/2);
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            return distance < this.radius + Math.max(obj.width, obj.height)/2;
         }
     }
-
-    obstacles = obstacles.filter(o=>o.x+o.w>0);
-    coins = coins.filter(c=>c.x+c.r>0);
-
-    if(frame%90==0) spawnObstacle();
-    if(frame%60==0) spawnCoin();
-    frame++;
-}
-
-function draw(){
-    ctx.fillStyle='#cceeff';
-    ctx.fillRect(0,0,cw,ch*0.75);
-    ctx.fillStyle='#88cc88';
-    ctx.fillRect(0,ch*0.75,cw,ch*0.25);
-    ctx.drawImage(cat, catObj.x, catObj.y, catObj.w, catObj.h);
-    obstacles.forEach(o=>ctx.drawImage(cactus,o.x,o.y,o.w,o.h));
-    coins.forEach(c=>{
-        ctx.beginPath();
-        ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
-        ctx.fillStyle='#FFD700'; ctx.fill();
-        ctx.strokeStyle='#DAA520'; ctx.stroke();
+    
+    // Функция сброса игры
+    function resetGame() {
+        gameRunning = true;
+        score = 0;
+        coins = 0;
+        frameCount = 0;
+        lastObstacleTime = 0;
+        lastCoinTime = 0;
+        obstacles = [];
+        coinItems = [];
+        gameSpeed = 5;
+        
+        cat.y = 150;
+        cat.velocity = 0;
+        cat.isJumping = false;
+        
+        timeEl.textContent = '0';
+        coinsEl.textContent = '0';
+        playBtn.style.display = 'none';
+    }
+    
+    // Функция завершения игры
+    function endGame() {
+        gameRunning = false;
+        playBtn.textContent = 'Играть снова';
+        playBtn.style.display = 'block';
+    }
+    
+    // Основной игровой цикл
+    function gameLoop() {
+        if (!gameRunning) return;
+        
+        // Очистка canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Рисуем фон
+        ctx.fillStyle = '#cceeff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height * 0.75);
+        ctx.fillStyle = '#88cc88';
+        ctx.fillRect(0, canvas.height * 0.75, canvas.width, canvas.height * 0.25);
+        
+        // Обновление и отрисовка кота
+        cat.update();
+        cat.draw();
+        
+        // Генерация препятствий (не чаще чем каждые 90 кадров)
+        if (frameCount - lastObstacleTime > 90 && Math.random() < 0.02) {
+            obstacles.push(new Obstacle());
+            lastObstacleTime = frameCount;
+        }
+        
+        // Генерация монеток (не чаще чем каждые 120 кадров)
+        if (frameCount - lastCoinTime > 120 && Math.random() < 0.015) {
+            coinItems.push(new Coin());
+            lastCoinTime = frameCount;
+        }
+        
+        // Обновление и отрисовка препятствий
+        for (let i = obstacles.length - 1; i >= 0; i--) {
+            obstacles[i].update();
+            obstacles[i].draw();
+            
+            // Проверка столкновений
+            if (obstacles[i].collidesWith(cat)) {
+                endGame();
+                return;
+            }
+            
+            // Удаление вышедших за границы препятствий
+            if (obstacles[i].isOffscreen()) {
+                obstacles.splice(i, 1);
+            }
+        }
+        
+        // Обновление и отрисовка монеток
+        for (let i = coinItems.length - 1; i >= 0; i--) {
+            coinItems[i].update();
+            coinItems[i].draw();
+            
+            // Проверка сбора монеток
+            if (coinItems[i].collidesWith(cat)) {
+                coinItems[i].collected = true;
+                coins++;
+                coinsEl.textContent = coins;
+                coinItems.splice(i, 1);
+            }
+            
+            // Удаление вышедших за границы монеток
+            else if (coinItems[i].isOffscreen()) {
+                coinItems.splice(i, 1);
+            }
+        }
+        
+        // Увеличение скорости со временем
+        if (frameCount % 500 === 0) {
+            gameSpeed += 0.5;
+        }
+        
+        // Обновление счета (времени)
+        if (frameCount % 60 === 0) {
+            score++;
+            timeEl.textContent = score;
+        }
+        
+        frameCount++;
+        requestAnimationFrame(gameLoop);
+    }
+    
+    // Обработчики событий
+    playBtn.addEventListener('click', function() {
+        resetGame();
+        gameLoop();
     });
-}
-
-function loop(){update(); draw(); requestAnimationFrame(loop);}
-function jump(){if(gameRunning && catObj.grounded) catObj.vy=catObj.jump;}
-
-canvas.addEventListener('click',jump);
-canvas.addEventListener('touchstart',jump);
-playBtn.addEventListener('click',()=>{resetGame();});
-setInterval(()=>{if(gameRunning){timer++; timeEl.textContent=timer;}},1000);
-
-loop();
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.code === 'Space' && gameRunning) {
+            cat.jump();
+            e.preventDefault();
+        }
+    });
+    
+    canvas.addEventListener('click', function() {
+        if (gameRunning) {
+            cat.jump();
+        }
+    });
+    
+    canvas.addEventListener('touchstart', function(e) {
+        if (gameRunning) {
+            cat.jump();
+            e.preventDefault();
+        }
+    });
+    
+    // Обработчики для других элементов страницы
+    document.getElementById('soloBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        const soloSection = document.getElementById('solo');
+        const isHidden = soloSection.style.display !== 'block';
+        
+        soloSection.style.display = isHidden ? 'block' : 'none';
+        
+        if (isHidden) {
+            setTimeout(() => {
+                soloSection.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+    });
+});
 </script>
 </body>
 </html>

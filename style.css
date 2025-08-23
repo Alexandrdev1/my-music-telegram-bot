@@ -31,6 +31,53 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+/* Стили для игры */
+.game {
+    margin: 40px 0;
+    text-align: center;
+}
+
+.game-container {
+    background-color: #2d2d2d;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+#gameCanvas {
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.game-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#startGame {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+#startGame:hover {
+    background-color: #5aa9e6;
+}
+
+.score {
+    color: var(--text-primary);
+    font-weight: 500;
+}
 /* Стили для галереи */
 .gallery {
     margin: 40px 0;

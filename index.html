@@ -63,6 +63,18 @@
         </section>
 
         <section class="services">
+            <!-- Мини-игра -->
+<section class="game">
+    <h2>Мини-игра</h2>
+    <p>Попробуй избежать препятствий и собери как можно больше монеток!</p>
+    <div class="game-container">
+        <canvas id="gameCanvas" width="600" height="200"></canvas>
+        <div class="game-controls">
+            <button id="startGame">Начать игру</button>
+            <div class="score">Счёт: <span id="score">0</span></div>
+        </div>
+    </div>
+</section>
             <h2>Услуги</h2>
             <ul>
                 <li>Написание музыки — <strong>5000 ₽</strong></li>
@@ -157,6 +169,164 @@
             currentIndex = (currentIndex + 1) % items.length;
             updateCarousel();
         }, 5000);
+    });
+</script>
+<script>
+    // Мини-игра "Динозавр"
+    document.addEventListener('DOMContentLoaded', function() {
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startBtn = document.getElementById('startGame');
+        const scoreElement = document.getElementById('score');
+        
+        let gameRunning = false;
+        let score = 0;
+        let dino = {
+            x: 50,
+            y: 150,
+            width: 30,
+            height: 30,
+            jumping: false,
+            velocity: 0
+        };
+        
+        let obstacles = [];
+        let coins = [];
+        
+        function startGame() {
+            gameRunning = true;
+            score = 0;
+            obstacles = [];
+            coins = [];
+            dino.y = 150;
+            dino.jumping = false;
+            scoreElement.textContent = score;
+            gameLoop();
+        }
+        
+        function drawDino() {
+            ctx.fillStyle = '#ff6b6b';
+            ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+        }
+        
+        function updateDino() {
+            if (dino.jumping) {
+                dino.y += dino.velocity;
+                dino.velocity += 0.5;
+                
+                if (dino.y >= 150) {
+                    dino.y = 150;
+                    dino.jumping = false;
+                }
+            }
+        }
+        
+        function jump() {
+            if (!dino.jumping) {
+                dino.jumping = true;
+                dino.velocity = -12;
+            }
+        }
+        
+        function gameLoop() {
+            if (!gameRunning) return;
+            
+            // Очистка canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Обновление и отрисовка динозавра
+            updateDino();
+            drawDino();
+            
+            // Генерация препятствий и монеток
+            if (Math.random() < 0.02) {
+                obstacles.push({
+                    x: canvas.width,
+                    y: 150,
+                    width: 20,
+                    height: 30
+                });
+            }
+            
+            if (Math.random() < 0.01) {
+                coins.push({
+                    x: canvas.width,
+                    y: 100,
+                    width: 15,
+                    height: 15,
+                    collected: false
+                });
+            }
+            
+            // Обновление и отрисовка препятствий
+            for (let i = 0; i < obstacles.length; i++) {
+                obstacles[i].x -= 5;
+                ctx.fillStyle = '#86868b';
+                ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].width, obstacles[i].height);
+                
+                // Проверка столкновения
+                if (checkCollision(dino, obstacles[i])) {
+                    gameRunning = false;
+                    alert(`Игра окончена! Ваш счёт: ${score}`);
+                    return;
+                }
+                
+                // Удаление препятствий за пределами экрана
+                if (obstacles[i].x < -20) {
+                    obstacles.splice(i, 1);
+                    i--;
+                }
+            }
+            
+            // Обновление и отрисовка монеток
+            for (let i = 0; i < coins.length; i++) {
+                if (!coins[i].collected) {
+                    coins[i].x -= 5;
+                    ctx.fillStyle = '#ffd700';
+                    ctx.beginPath();
+                    ctx.arc(coins[i].x + coins[i].width/2, coins[i].y + coins[i].height/2, coins[i].width/2, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Проверка сбора монетки
+                    if (checkCollision(dino, coins[i])) {
+                        coins[i].collected = true;
+                        score += 10;
+                        scoreElement.textContent = score;
+                    }
+                }
+                
+                // Удаление монеток за пределами экрана
+                if (coins[i].x < -20) {
+                    coins.splice(i, 1);
+                    i--;
+                }
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        function checkCollision(obj1, obj2) {
+            return obj1.x < obj2.x + obj2.width &&
+                   obj1.x + obj1.width > obj2.x &&
+                   obj1.y < obj2.y + obj2.height &&
+                   obj1.y + obj1.height > obj2.y;
+        }
+        
+        // Обработчики событий
+        startBtn.addEventListener('click', startGame);
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' && gameRunning) {
+                jump();
+                e.preventDefault(); // Предотвращаем прокрутку страницы
+            }
+        });
+        
+        canvas.addEventListener('click', function() {
+            if (gameRunning) {
+                jump();
+            }
+        });
     });
 </script>
 </body>

@@ -7,40 +7,40 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Стили для игры */
+        /* --- Стили для игры --- */
         .game-container {
-            text-align: center;
-            margin: 20px auto;
-            max-width: 100%;
+          margin: 10px auto;
+          max-width: 100%;
+          position: relative;
         }
         canvas {
-            background: #cceeff;
-            border: 2px solid #333;
-            border-radius: 10px;
-            display: block;
-            margin: 0 auto;
-            width: 100%;
-            height: auto;
-            max-width: 600px;
-            touch-action: manipulation;
-        }
-        .game-stats {
-            margin-top: 10px;
-            font-size: 18px;
-            font-weight: bold;
+          background: #cceeff;
+          border: 2px solid #333;
+          border-radius: 10px;
+          display: block;
+          margin: 0 auto;
+          touch-action: manipulation;
+          max-width: 100%;
         }
         #playBtn {
-            position: absolute;
-            top: 50%;left: 50%;
-            transform: translate(-50%,-50%);
-            padding:15px 30px;
-            font-size:20px;
-            font-weight:bold;
-            background:#ff6600;
-            color:#fff;
-            border:none;
-            border-radius:10px;
-            cursor:pointer;
+          position: absolute;
+          top: 50%;left: 50%;
+          transform: translate(-50%,-50%);
+          padding:15px 30px;
+          font-size:20px;
+          font-weight:bold;
+          background:#ff6600;
+          color:#fff;
+          border:none;
+          border-radius:10px;
+          cursor:pointer;
+          z-index: 10;
+        }
+        .game-stats {
+          margin-top: 5px;
+          font-size: 18px;
+          font-weight: bold;
+          text-align: center;
         }
     </style>
 </head>
@@ -102,17 +102,17 @@
             <a href="https://tips.yandex.ru/guest/payment/3400836" class="link-btn" style="margin-top: 15px;"><i class="fas fa-hand-holding-heart"></i> Поддержать на Яндекс.Деньги</a>
         </section>
 
-        <!-- МИНИ-ИГРА -->
-        <section class="game-container">
-            <h2>Мини игра - Дикий кот</h2>
-            <div style="position: relative; display: inline-block; max-width:100%;">
-                <canvas id="gameCanvas" width="600" height="200"></canvas>
-                <button id="playBtn">▶ Play</button>
-            </div>
-            <div class="game-stats">
-                Время: <span id="time">0</span> сек | Монетки: <span id="coins">0</span>
-            </div>
-            <p>Тапни по экрану, чтобы прыгнуть 🐱</p>
+        <!-- === МИНИ ИГРА === -->
+        <section class="game">
+          <h2>Мини игра - Дикий кот</h2>
+          <div class="game-container">
+            <canvas id="gameCanvas" height="200"></canvas>
+            <button id="playBtn">▶ Play</button>
+          </div>
+          <div class="game-stats">
+            Время: <span id="time">0</span> сек | Монетки: <span id="coins">0</span>
+          </div>
+          <p style="text-align:center">Тапни по экрану, чтобы прыгнуть 🐱</p>
         </section>
 
         <footer>
@@ -127,12 +127,14 @@
     </div>
 
     <script>
-        // Сольный проект кнопка
+        // Показ/скрытие информации о сольном проекте
         document.getElementById('soloBtn').addEventListener('click', function(e) {
             e.preventDefault();
             const soloSection = document.getElementById('solo');
             const isHidden = soloSection.style.display !== 'block';
+            
             soloSection.style.display = isHidden ? 'block' : 'none';
+            
             if (isHidden) {
                 setTimeout(() => {
                     soloSection.scrollIntoView({ behavior: 'smooth' });
@@ -145,101 +147,120 @@
         const img = document.getElementById("profileImage");
         const modalImg = document.getElementById("modalImage");
         const span = document.getElementsByClassName("close")[0];
-        img.onclick = () => { modal.style.display = "block"; modalImg.src = img.src; document.body.style.overflow = "hidden"; }
-        span.onclick = () => { modal.style.display = "none"; document.body.style.overflow = "auto"; }
-        window.onclick = e => { if (e.target == modal) { modal.style.display = "none"; document.body.style.overflow = "auto"; } }
 
-        // ------------------ ИГРА ------------------
+        img.onclick = function() {
+            modal.style.display = "block";
+            modalImg.src = this.src;
+            document.body.style.overflow = "hidden";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
+        }
+
+        /* ================== ИГРА ================== */
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const playBtn = document.getElementById("playBtn");
 
+        function resizeCanvas() {
+          canvas.width = Math.min(window.innerWidth - 20, 600);
+        }
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
         let gameRunning = false;
+        let catImg = new Image(); catImg.src = "https://i.ibb.co/xDZwXHY/cat.png"; 
+        let cactusImg = new Image(); cactusImg.src = "https://i.ibb.co/6JRbhzx/cactus.png"; 
+        let coinImg = new Image(); coinImg.src = "https://upload.wikimedia.org/wikipedia/commons/4/4e/Emoji_u1f4b0.svg"; 
 
-        let catImg = new Image(); catImg.src = "cat.png";
-        let cactusImg = new Image(); cactusImg.src = "cactus.png";
-        let coinImg = new Image(); coinImg.src = "https://upload.wikimedia.org/wikipedia/commons/4/4e/Emoji_u1f4b0.svg";
-
-        let cat, obstacles, coins, time, coinCount, gameSpeed, lastObstacleTime;
+        let cat, obstacles, coins, time, coinCount, gameSpeed, frame;
 
         function resetGame() {
-            cat = { x: 50, y: 150, w: 64, h: 64, vy: 0, jumpPower: -12, gravity: 0.6, grounded: true };
-            obstacles = [];
-            coins = [];
-            time = 0;
-            coinCount = 0;
-            gameSpeed = 5;
-            lastObstacleTime = 0;
-            document.getElementById("time").textContent = 0;
-            document.getElementById("coins").textContent = 0;
-            gameRunning = true;
-            playBtn.style.display = "none";
+          cat = { x: 50, y: 150, w: 40, h: 40, vy: 0, jumpPower: -10, gravity: 0.5, grounded: true };
+          obstacles = [];
+          coins = [];
+          time = 0;
+          coinCount = 0;
+          gameSpeed = 4;
+          frame = 0;
+          document.getElementById("time").textContent = 0;
+          document.getElementById("coins").textContent = 0;
+          gameRunning = true;
+          playBtn.style.display = "none";
         }
 
-        function spawnObstacle() {
-            let now = Date.now();
-            if (now - lastObstacleTime > 1500 + Math.random() * 1500) {
-                obstacles.push({ x: canvas.width, y: 136, w: 64, h: 64 });
-                if (Math.random() > 0.5) {
-                    let coinY = [80, 110, 140][Math.floor(Math.random()*3)];
-                    coins.push({ x: canvas.width + 80, y: coinY, w: 32, h: 32 });
-                }
-                lastObstacleTime = now;
+        function spawnObjects() {
+          if (frame % 120 === 0) {
+            obstacles.push({ x: canvas.width, y: 160, w: 30, h: 40 });
+            if (Math.random() > 0.5) {
+              coins.push({ x: canvas.width + 40, y: 100 + Math.random() * 40, w: 20, h: 20 });
             }
+          }
         }
 
         function update() {
-            if (!gameRunning) return;
-            // физика кота
-            cat.y += cat.vy; cat.vy += cat.gravity;
-            if (cat.y >= 150) { cat.y = 150; cat.vy = 0; cat.grounded = true; }
+          cat.y += cat.vy;
+          cat.vy += cat.gravity;
+          if (cat.y >= 150) { cat.y = 150; cat.vy = 0; cat.grounded = true; }
 
-            // движение
-            for (let o of obstacles) o.x -= gameSpeed;
-            for (let c of coins) c.x -= gameSpeed;
+          for (let o of obstacles) o.x -= gameSpeed;
+          for (let c of coins) c.x -= gameSpeed;
 
-            // проверка столкновений
-            for (let o of obstacles) {
-                if (cat.x < o.x + o.w && cat.x + cat.w > o.x && cat.y < o.y + o.h && cat.y + cat.h > o.y) {
-                    gameRunning = false;
-                    playBtn.textContent = "Играть снова";
-                    playBtn.style.display = "block";
-                }
+          for (let o of obstacles) {
+            if (cat.x < o.x + o.w && cat.x + cat.w > o.x && cat.y < o.y + o.h && cat.y + cat.h > o.y) {
+              gameRunning = false;
+              playBtn.textContent = "Играть снова";
+              playBtn.style.display = "block";
             }
+          }
 
-            // сбор монет
-            for (let i = coins.length - 1; i >= 0; i--) {
-                let c = coins[i];
-                if (cat.x < c.x + c.w && cat.x + cat.w > c.x && cat.y < c.y + c.h && cat.y + cat.h > c.y) {
-                    coinCount++; coins.splice(i, 1);
-                    document.getElementById("coins").textContent = coinCount;
-                }
+          for (let i = coins.length - 1; i >= 0; i--) {
+            let c = coins[i];
+            if (cat.x < c.x + c.w && cat.x + cat.w > c.x && cat.y < c.y + c.h && cat.y + cat.h > c.y) {
+              coinCount++;
+              coins.splice(i, 1);
+              document.getElementById("coins").textContent = coinCount;
             }
+          }
 
-            // очистка
-            obstacles = obstacles.filter(o => o.x + o.w > 0);
-            coins = coins.filter(c => c.x + c.w > 0);
+          obstacles = obstacles.filter(o => o.x + o.w > 0);
+          coins = coins.filter(c => c.x + c.w > 0);
 
-            spawnObstacle();
+          frame++;
+          spawnObjects();
         }
 
         function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#88cc88"; ctx.fillRect(0, 190, canvas.width, 10); // земля
-            ctx.drawImage(catImg, cat.x, cat.y, cat.w, cat.h);
-            for (let o of obstacles) ctx.drawImage(cactusImg, o.x, o.y, o.w, o.h);
-            for (let c of coins) ctx.drawImage(coinImg, c.x, c.y, c.w, c.h);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = "#88cc88"; 
+          ctx.fillRect(0, 190, canvas.width, 10); 
+          ctx.drawImage(catImg, cat.x, cat.y, cat.w, cat.h);
+          for (let o of obstacles) ctx.drawImage(cactusImg, o.x, o.y, o.w, o.h);
+          for (let c of coins) ctx.drawImage(coinImg, c.x, c.y, c.w, c.h);
         }
 
         function loop() {
-            if (gameRunning) { update(); draw(); }
-            requestAnimationFrame(loop);
+          if (gameRunning) {
+            update();
+            draw();
+          }
+          requestAnimationFrame(loop);
         }
 
         function jump() {
-            if (gameRunning && cat.grounded) {
-                cat.vy = cat.jumpPower; cat.grounded = false;
-            }
+          if (gameRunning && cat.grounded) {
+            cat.vy = cat.jumpPower;
+            cat.grounded = false;
+          }
         }
 
         canvas.addEventListener("touchstart", jump);
@@ -250,6 +271,5 @@
 
         loop();
     </script>
-
 </body>
 </html>

@@ -20,19 +20,20 @@
             <h2>Обо мне</h2>
             <p>Гитарист. Один из основателей группы НЕ ОН.</p>
         </section>
+
         <!-- Фотогалерея -->
-<section class="gallery">
-    <h2>Фотогалерея</h2>
-    <div class="carousel">
-        <div class="carousel-container">
-            <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/main/photo1.jpg" alt="Фото 1">
-            <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/main/photo2.jpg" alt="Фото 2">
-            <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/main/photo3.jpg" alt="Фото 3">
-        </div>
-        <button class="carousel-prev">❮</button>
-        <button class="carousel-next">❯</button>
-    </div>
-</section>
+        <section class="gallery">
+            <h2>Фотогалерея</h2>
+            <div class="carousel">
+                <div class="carousel-container">
+                    <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/main/photo1.jpg" alt="Фото 1">
+                    <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/main/photo2.jpg" alt="Фото 2">
+                    <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/main/photo3.jpg" alt="Фото 3">
+                </div>
+                <button class="carousel-prev">❮</button>
+                <button class="carousel-next">❯</button>
+            </div>
+        </section>
 
         <section class="music">
             <h2>Проекты</h2>
@@ -51,8 +52,8 @@
                 </a>
             </div>
             
-            <!-- Сольный проект - СКРЫТ ПО УМОЛЧАНИЮ -->
-            <div id="solo" class="solo-project">
+            <!-- Сольный проект -->
+            <div id="solo" class="solo-project" style="display:none;">
                 <h3>so so</h3>
                 <p>Сольный проект</p>
                 <div class="solo-links">
@@ -63,21 +64,22 @@
         </section>
 
         <section class="services">
-          <!-- Мини-игра -->
-<section class="game">
-    <h2>Мини-игра</h2>
-    <p>Попробуй избежать препятствий и собери как можно больше монеток!</p>
-    <div class="game-container">
-        <canvas id="gameCanvas" width="600" height="200"></canvas>
-        <div class="game-controls">
-            <button id="startGame">Начать игру</button>
-            <div class="game-stats">
-                <div class="score">Счёт: <span id="score">0</span></div>
-                <div class="timer">Время: <span id="time">0</span> сек</div>
-            </div>
-        </div>
-    </div>
-</section>
+            <!-- Мини-игра -->
+            <section class="game">
+                <h2>Мини-игра</h2>
+                <p>Попробуй избежать препятствий и собери как можно больше монеток!</p>
+                <div class="game-container">
+                    <canvas id="gameCanvas" width="600" height="200"></canvas>
+                    <div class="game-controls">
+                        <button id="startGame">Начать игру</button>
+                        <div class="game-stats">
+                            <div class="score">Счёт: <span id="score">0</span></div>
+                            <div class="timer">Время: <span id="time">0</span> сек</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <h2>Услуги</h2>
             <ul>
                 <li>Написание музыки — <strong>5000 ₽</strong></li>
@@ -105,277 +107,42 @@
     </div>
 
     <script>
-       document.addEventListener('DOMContentLoaded', function() {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const startBtn = document.getElementById('startGame');
-    const scoreElement = document.getElementById('score');
-    const timeElement = document.getElementById('time'); // Новый элемент для таймера
-    
-    let gameRunning = false;
-    let score = 0;
-    let gameTime = 0; // Переменная для хранения времени игры
-    let gameTimer; // Переменная для хранения интервала таймера
-    
-    let dino = {
-        x: 50,
-        y: 150,
-        width: 30,
-        height: 30,
-        jumping: false,
-        velocity: 0
-    };
-    
-    let obstacles = [];
-    let coins = [];
-    
-    function startGame() {
-        gameRunning = true;
-        score = 0;
-        gameTime = 0; // Сброс времени
-        obstacles = [];
-        coins = [];
-        dino.y = 150;
-        dino.jumping = false;
-        scoreElement.textContent = score;
-        timeElement.textContent = gameTime; // Обновление отображения времени
-        
-        // Запуск таймера
-        clearInterval(gameTimer);
-        gameTimer = setInterval(function() {
-            if (gameRunning) {
-                gameTime++;
-                timeElement.textContent = gameTime;
-            }
-        }, 1000);
-        
-        gameLoop();
-    }
-    
-    function drawDino() {
-        ctx.fillStyle = '#ff6b6b';
-        ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
-    }
-    
-    function updateDino() {
-        if (dino.jumping) {
-            dino.y += dino.velocity;
-            dino.velocity += 0.5;
-            
-            if (dino.y >= 150) {
-                dino.y = 150;
-                dino.jumping = false;
-            }
-        }
-    }
-    
-    function jump() {
-        if (!dino.jumping) {
-            dino.jumping = true;
-            dino.velocity = -12;
-        }
-    }
-    
-    function gameLoop() {
-        if (!gameRunning) return;
-        
-        // Очистка canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Обновление и отрисовка динозавра
-        updateDino();
-        drawDino();
-        
-        // Генерация препятствий и монеток
-        if (Math.random() < 0.02) {
-            obstacles.push({
-                x: canvas.width,
-                y: 150,
-                width: 20,
-                height: 30
-            });
-        }
-        
-        if (Math.random() < 0.01) {
-            coins.push({
-                x: canvas.width,
-                y: 100,
-                width: 15,
-                height: 15,
-                collected: false
-            });
-        }
-        
-        // Обновление и отрисовка препятствий
-        for (let i = 0; i < obstacles.length; i++) {
-            obstacles[i].x -= 5;
-            ctx.fillStyle = '#86868b';
-            ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].width, obstacles[i].height);
-            
-            // Проверка столкновения
-            if (checkCollision(dino, obstacles[i])) {
-                gameRunning = false;
-                clearInterval(gameTimer); // Остановка таймера при завершении игры
-                alert(`Игра окончена! Ваш счёт: ${score}. Время: ${gameTime} сек`);
-                return;
-            }
-            
-            // Удаление препятствий за пределами экрана
-            if (obstacles[i].x < -20) {
-                obstacles.splice(i, 1);
-                i--;
-            }
-        }
-        
-        // Обновление и отрисовка монеток
-        for (let i = 0; i < coins.length; i++) {
-            if (!coins[i].collected) {
-                coins[i].x -= 5;
-                ctx.fillStyle = '#ffd700';
-                ctx.beginPath();
-                ctx.arc(coins[i].x + coins[i].width/2, coins[i].y + coins[i].height/2, coins[i].width/2, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Проверка сбора монетки
-                if (checkCollision(dino, coins[i])) {
-                    coins[i].collected = true;
-                    score += 10;
-                    scoreElement.textContent = score;
-                }
-            }
-            
-            // Удаление монеток за пределами экрана
-            if (coins[i].x < -20) {
-                coins.splice(i, 1);
-                i--;
-            }
-        }
-        
-        requestAnimationFrame(gameLoop);
-    }
-    
-    function checkCollision(obj1, obj2) {
-        return obj1.x < obj2.x + obj2.width &&
-               obj1.x + obj1.width > obj2.x &&
-               obj1.y < obj2.y + obj2.height &&
-               obj1.y + obj1.height > obj2.y;
-    }
-    
-    // Обработчики событий
-    startBtn.addEventListener('click', startGame);
-    
-    document.addEventListener('keydown', function(e) {
-        if (e.code === 'Space' && gameRunning) {
-            jump();
-            e.preventDefault();
-        }
-    });
-    
-    canvas.addEventListener('click', function() {
-        if (gameRunning) {
-            jump();
-        }
-    });
-});
-        // Показ/скрытие информации о сольном проекте
-        document.getElementById('soloBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            const soloSection = document.getElementById('solo');
-            const isHidden = soloSection.style.display !== 'block';
-            
-            soloSection.style.display = isHidden ? 'block' : 'none';
-            
-            if (isHidden) {
-                setTimeout(() => {
-                    soloSection.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-            }
-        });
-
-        // Модальное окно для фото
-        const modal = document.getElementById("imageModal");
-        const img = document.getElementById("profileImage");
-        const modalImg = document.getElementById("modalImage");
-        const span = document.getElementsByClassName("close")[0];
-
-        img.onclick = function() {
-            modal.style.display = "block";
-            modalImg.src = this.src;
-            document.body.style.overflow = "hidden";
-        }
-
-        span.onclick = function() {
-            modal.style.display = "none";
-            document.body.style.overflow = "auto";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-                document.body.style.overflow = "auto";
-            }
-        }
-    </script>
-<script>
-    // Карусель галереи
-    document.addEventListener('DOMContentLoaded', function() {
-        const carousel = document.querySelector('.carousel-container');
-        const items = carousel.querySelectorAll('img');
-        const prevBtn = document.querySelector('.carousel-prev');
-        const nextBtn = document.querySelector('.carousel-next');
-        let currentIndex = 0;
-        
-        function updateCarousel() {
-            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
-        }
-        
-        nextBtn.addEventListener('click', function() {
-            currentIndex = (currentIndex + 1) % items.length;
-            updateCarousel();
-        });
-        
-        prevBtn.addEventListener('click', function() {
-            currentIndex = (currentIndex - 1 + items.length) % items.length;
-            updateCarousel();
-        });
-        
-        // Автопрокрутка каждые 5 секунд
-        setInterval(function() {
-            currentIndex = (currentIndex + 1) % items.length;
-            updateCarousel();
-        }, 5000);
-    });
-</script>
-<script>
-    // Мини-игра "Динозавр"
+    // Мини-игра
     document.addEventListener('DOMContentLoaded', function() {
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const startBtn = document.getElementById('startGame');
         const scoreElement = document.getElementById('score');
+        const timeElement = document.getElementById('time');
         
         let gameRunning = false;
         let score = 0;
-        let dino = {
-            x: 50,
-            y: 150,
-            width: 30,
-            height: 30,
-            jumping: false,
-            velocity: 0
-        };
+        let gameTime = 0;
+        let gameTimer;
         
+        let dino = { x: 50, y: 150, width: 30, height: 30, jumping: false, velocity: 0 };
         let obstacles = [];
         let coins = [];
         
         function startGame() {
             gameRunning = true;
             score = 0;
+            gameTime = 0;
             obstacles = [];
             coins = [];
             dino.y = 150;
             dino.jumping = false;
             scoreElement.textContent = score;
+            timeElement.textContent = gameTime;
+            
+            clearInterval(gameTimer);
+            gameTimer = setInterval(() => {
+                if (gameRunning) {
+                    gameTime++;
+                    timeElement.textContent = gameTime;
+                }
+            }, 1000);
+            
             gameLoop();
         }
         
@@ -388,7 +155,6 @@
             if (dino.jumping) {
                 dino.y += dino.velocity;
                 dino.velocity += 0.5;
-                
                 if (dino.y >= 150) {
                     dino.y = 150;
                     dino.jumping = false;
@@ -405,104 +171,98 @@
         
         function gameLoop() {
             if (!gameRunning) return;
-            
-            // Очистка canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Обновление и отрисовка динозавра
             updateDino();
             drawDino();
             
-            // Генерация препятствий и монеток
+            // препятствия
             if (Math.random() < 0.02) {
-                obstacles.push({
-                    x: canvas.width,
-                    y: 150,
-                    width: 20,
-                    height: 30
-                });
+                obstacles.push({ x: canvas.width, y: 150, width: 20, height: 30 });
             }
-            
+            // монетки
             if (Math.random() < 0.01) {
-                coins.push({
-                    x: canvas.width,
-                    y: 100,
-                    width: 15,
-                    height: 15,
-                    collected: false
-                });
+                coins.push({ x: canvas.width, y: 100, width: 15, height: 15, collected: false });
             }
             
-            // Обновление и отрисовка препятствий
+            // обработка препятствий
             for (let i = 0; i < obstacles.length; i++) {
                 obstacles[i].x -= 5;
                 ctx.fillStyle = '#86868b';
                 ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].width, obstacles[i].height);
-                
-                // Проверка столкновения
                 if (checkCollision(dino, obstacles[i])) {
                     gameRunning = false;
-                    alert(`Игра окончена! Ваш счёт: ${score}`);
+                    clearInterval(gameTimer);
+                    alert(`Игра окончена! Ваш счёт: ${score}. Время: ${gameTime} сек`);
                     return;
                 }
-                
-                // Удаление препятствий за пределами экрана
-                if (obstacles[i].x < -20) {
-                    obstacles.splice(i, 1);
-                    i--;
-                }
+                if (obstacles[i].x < -20) { obstacles.splice(i, 1); i--; }
             }
             
-            // Обновление и отрисовка монеток
+            // обработка монеток
             for (let i = 0; i < coins.length; i++) {
                 if (!coins[i].collected) {
                     coins[i].x -= 5;
                     ctx.fillStyle = '#ffd700';
                     ctx.beginPath();
-                    ctx.arc(coins[i].x + coins[i].width/2, coins[i].y + coins[i].height/2, coins[i].width/2, 0, Math.PI * 2);
+                    ctx.arc(coins[i].x + coins[i].width/2, coins[i].y + coins[i].height/2, coins[i].width/2, 0, Math.PI*2);
                     ctx.fill();
-                    
-                    // Проверка сбора монетки
                     if (checkCollision(dino, coins[i])) {
                         coins[i].collected = true;
                         score += 10;
                         scoreElement.textContent = score;
                     }
                 }
-                
-                // Удаление монеток за пределами экрана
-                if (coins[i].x < -20) {
-                    coins.splice(i, 1);
-                    i--;
-                }
+                if (coins[i].x < -20) { coins.splice(i, 1); i--; }
             }
             
             requestAnimationFrame(gameLoop);
         }
         
-        function checkCollision(obj1, obj2) {
-            return obj1.x < obj2.x + obj2.width &&
-                   obj1.x + obj1.width > obj2.x &&
-                   obj1.y < obj2.y + obj2.height &&
-                   obj1.y + obj1.height > obj2.y;
+        function checkCollision(a, b) {
+            return a.x < b.x + b.width &&
+                   a.x + a.width > b.x &&
+                   a.y < b.y + b.height &&
+                   a.y + a.height > b.y;
         }
         
-        // Обработчики событий
         startBtn.addEventListener('click', startGame);
-        
-        document.addEventListener('keydown', function(e) {
-            if (e.code === 'Space' && gameRunning) {
-                jump();
-                e.preventDefault(); // Предотвращаем прокрутку страницы
-            }
-        });
-        
-        canvas.addEventListener('click', function() {
-            if (gameRunning) {
-                jump();
-            }
-        });
+        document.addEventListener('keydown', e => { if (e.code === 'Space' && gameRunning) { jump(); e.preventDefault(); } });
+        canvas.addEventListener('click', () => { if (gameRunning) jump(); });
     });
-</script>
+    
+    // Сольный проект
+    document.getElementById('soloBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        const soloSection = document.getElementById('solo');
+        const isHidden = soloSection.style.display !== 'block';
+        soloSection.style.display = isHidden ? 'block' : 'none';
+        if (isHidden) {
+            setTimeout(() => soloSection.scrollIntoView({ behavior: 'smooth' }), 100);
+        }
+    });
+
+    // Модальное окно для фото
+    const modal = document.getElementById("imageModal");
+    const img = document.getElementById("profileImage");
+    const modalImg = document.getElementById("modalImage");
+    const span = document.getElementsByClassName("close")[0];
+    img.onclick = function() { modal.style.display = "block"; modalImg.src = this.src; document.body.style.overflow = "hidden"; }
+    span.onclick = function() { modal.style.display = "none"; document.body.style.overflow = "auto"; }
+    window.onclick = function(event) { if (event.target == modal) { modal.style.display = "none"; document.body.style.overflow = "auto"; } }
+
+    // Карусель галереи
+    document.addEventListener('DOMContentLoaded', function() {
+        const carousel = document.querySelector('.carousel-container');
+        const items = carousel.querySelectorAll('img');
+        const prevBtn = document.querySelector('.carousel-prev');
+        const nextBtn = document.querySelector('.carousel-next');
+        let currentIndex = 0;
+        function updateCarousel() { carousel.style.transform = `translateX(-${currentIndex * 100}%)`; }
+        nextBtn.addEventListener('click', () => { currentIndex = (currentIndex + 1) % items.length; updateCarousel(); });
+        prevBtn.addEventListener('click', () => { currentIndex = (currentIndex - 1 + items.length) % items.length; updateCarousel(); });
+        setInterval(() => { currentIndex = (currentIndex + 1) % items.length; updateCarousel(); }, 5000);
+    });
+    </script>
 </body>
 </html>

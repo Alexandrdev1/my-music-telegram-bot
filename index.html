@@ -1,432 +1,82 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Абрамов Александр - Музыкант</title>
-<link rel="stylesheet" href="style.css">
-<!-- Подключаем правильный Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p0V+rY8C1xFzM9Ck5mYJ6i3YQy6M3nNf4QJXyZ1+0FmqBiPbP0KqkVZ4HqXwMEYc6KT9Mdl+9gP6XdJ5r1LQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-<style>
-/* Базовая адаптация */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  line-height: 1.5;
-}
-
-.container {
-  padding: 10px;
-  max-width: 900px;
-  margin: auto;
-}
-
-header {
-  text-align: center;
-}
-
-.profile-img {
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-h1 {
-  font-size: 1.8em;
-}
-
-h2 {
-  font-size: 1.4em;
-  margin-top: 20px;
-}
-
-button, .link-btn {
-  background: #333;
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 1em;
-  cursor: pointer;
-}
-
-button:hover, .link-btn:hover {
-  background: #555;
-}
-
-.link-btn {
-  display: inline-block;
-  text-decoration: none;
-  margin: 5px 0;
-}
-
-/* Галерея */
-.carousel {
-  position: relative;
-  overflow: hidden;
-  max-width: 100%;
-}
-
-.carousel-container {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-}
-
-.carousel img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px;
-}
-
-.carousel-prev, .carousel-next {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.5);
-  border: none;
-  color: #fff;
-  font-size: 20px;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.carousel-prev { left: 5px; }
-.carousel-next { right: 5px; }
-
-/* Игра */
-.game-container {
-  max-width: 100%;
-  overflow: hidden;
-}
-
-#gameCanvas {
-  width: 100%;
-  height: auto;
-  background: #f9f9f9;
-  border: 1px solid #ccc;
-  display: block;
-  margin: auto;
-}
-
-.game-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-  flex-wrap: wrap;
-}
-
-/* Модальное окно */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 999;
-  padding-top: 60px;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.9);
-}
-
-.modal-content {
-  display: block;
-  max-width: 90%;
-  max-height: 80%;
-  margin: auto;
-}
-
-.close {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  color: white;
-  font-size: 40px;
-  cursor: pointer;
-}
-
-/* Адаптивность */
-@media (max-width: 600px) {
-  .profile-img {
-    width: 120px;
-    height: 120px;
-  }
-  h1 { font-size: 1.4em; }
-  h2 { font-size: 1.2em; }
-  button, .link-btn {
-    width: 100%;
-    margin: 5px 0;
-    font-size: 0.95em;
-  }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>НЕ ОН - Группа</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-<div class="container">
-<header>
-<img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/refs/heads/main/Обложка.jpg" alt="Абрамов Александр" class="profile-img" id="profileImage">
-<h1>Абрамов Александр</h1>
-<p class="tagline">Музыкант</p>
-</header>
+    <div class="container">
+        <!-- Стрелочка назад вверху -->
+        <a href="index.html" class="back-button-top">
+            <i class="fas fa-arrow-left"></i>
+        </a>
 
-<section class="about">
-<h2>Обо мне</h2>
-<p>Гитарист. Один из основателей группы НЕ ОН.</p>
-</section>
+        <header>
+            <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/refs/heads/main/Обложка%20НЕ%20ОН.jpg" alt="Логотип НЕ ОН" class="profile-img">
+            <h1>НЕ ОН</h1>
+            <p class="tagline">Российская рок-группа</p>
+        </header>
 
-<!-- Фотогалерея -->
-<section class="gallery">
-<h2>Фотогалерея</h2>
-<div class="carousel">
-<div class="carousel-container">
-<img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/main/photo1.jpg" alt="Фото 1">
-<img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/main/photo2.jpg" alt="Фото 2">
-<img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/main/photo3.jpg" alt="Фото 3">
-</div>
-<button class="carousel-prev">❮</button>
-<button class="carousel-next">❯</button>
-</div>
-</section>
+        <section class="about">
+            <h2>О группе</h2>
+            <p>НЕ ОН - российская рок группа, исполняющая поп-рок и инди-рок. Сформирована в 2019 году двумя музыкантами Кириллом Лежениным и Александром Абрамовым.</p>
+        </section>
 
-<section class="music">
-<h2>Проекты</h2>
-<div class="project-grid">
-<a href="neon.html" class="project-card neon-card">
-<div class="project-icon">
-<i class="fas fa-users"></i>
-</div>
-<span>НЕ ОН</span>
-</a>
-<a href="#solo" class="project-card solo-card" id="soloBtn">
-<div class="project-icon">
-<i class="fas fa-user"></i>
-</div>
-<span>so so</span>
-</a>
-</div>
+        <section class="music">
+            <h2>Музыка</h2>
+            <div class="music-links">
+                <a href="https://band.link/Hk7af" class="link-btn bandlink-btn"><i class="fas fa-link"></i> Band.link</a>
+                <a href="https://music.yandex.ru/artist/3324723" class="link-btn yandex-btn"><i class="fab fa-yandex"></i> Яндекс Музыка</a>
+                <a href="https://www.youtube.com/@neonaktotogda" class="link-btn youtube-btn"><i class="fab fa-youtube"></i> YouTube</a>
+            </div>
+        </section>
 
-<!-- Сольный проект -->
-<div id="solo" class="solo-project" style="display:none;">
-<h3>so so</h3>
-<p>Сольный проект</p>
-<div class="solo-links">
-<a href="https://t.me/sssssssooo1" class="link-btn"><i class="fab fa-telegram"></i> Telegram</a>
-<a href="https://music.yandex.ru/artist/24305033" class="link-btn"><i class="fab fa-yandex"></i> Яндекс.Музыка</a>
-</div>
-</div>
-</section>
+        <!-- Вкладки -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="releases">Релизы</button>
+            <button class="tab-btn" data-tab="concerts">Концерты</button>
+        </div>
 
-<section class="services">
-<!-- Мини-игра -->
-<section class="game">
-<h2>Мини-игра</h2>
-<p>Попробуй избежать препятствий и собери как можно больше монеток!</p>
-<div class="game-container">
-<canvas id="gameCanvas" width="600" height="200"></canvas>
-<div class="game-controls">
-<button id="startGame">Начать игру</button>
-<div class="game-stats">
-<div class="score">Счёт: <span id="score">0</span></div>
-<div class="timer">Время: <span id="time">0</span> сек</div>
-</div>
-</div>
-</div>
-</section>
+        <div class="tab-content active" id="releases">
+            <div class="dev-message">
+                <i class="fas fa-tools"></i>
+                <p>Раздел в разработке</p>
+            </div>
+        </div>
 
-<h2>Услуги</h2>
-<ul>
-<li>Написание музыки — <strong>5000 ₽</strong></li>
-<li>Уроки по гитаре (60 мин) — <strong>1000 ₽</strong></li>
-<li>? — <strong>2000 ₽</strong></li>
-</ul>
-<p>Заказать услугу: <a href="https://t.me/Alexandrdev1">@Alexandrdev1</a></p>
-</section>
+        <div class="tab-content" id="concerts">
+            <div class="dev-message">
+                <i class="fas fa-tools"></i>
+                <p>Раздел в разработке</p>
+            </div>
+        </div>
 
-<section class="donate">
-<h2>Поддержать творчество</h2>
-<p>Если вам нравится моя музыка, вы можете поддержать меня донатом. Каждая копейка пойдет на создание новой музыки и развитие проекта. Спасибо!</p>
-<a href="https://tips.yandex.ru/guest/payment/3400836" class="link-btn" style="margin-top: 15px;"><i class="fas fa-hand-holding-heart"></i> Поддержать на Яндекс.Деньги</a>
-</section>
+        <section class="contacts">
+            <h2>Контакты</h2>
+            <div class="contact-grid">
+                <a href="https://t.me/ne_on_group" class="link-btn"><i class="fab fa-telegram"></i> Telegram</a>
+                <a href="https://vk.com/neon_aktotogda" class="link-btn" style="background-color: #4a76a8;"><i class="fab fa-vk"></i> ВКонтакте</a>
+                <a href="#" class="link-btn instagram-disabled" style="background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="mailto:neon.music2019@gmail.com" class="link-btn"><i class="fas fa-envelope"></i> Email</a>
+            </div>
+            <p style="margin-top: 20px; color: var(--text-secondary); font-size: 15px; text-align: center;">
+                По всем вопросам: <a href="mailto:neon.music2019@gmail.com" style="color: var(--primary-color);">neon.music2019@gmail.com</a>
+            </p>
+        </section>
 
-<footer>
-<p>Свяжитесь со мной: <a href="https://t.me/Alexandrdev1">Telegram</a> | <a href="mailto:abramov.aleksandr.99@icloud.com">Email</a></p>
-</footer>
-</div>
+        <section class="back-link">
+            <a href="index.html" class="link-btn"><i class="fas fa-arrow-left"></i> Вернуться на главную</a>
+        </section>
 
-<!-- Модальное окно для фото -->
-<div id="imageModal" class="modal">
-<span class="close">&times;</span>
-<img class="modal-content" id="modalImage">
-</div>
+        <footer>
+            <p>&copy; НЕ ОН</p>
+        </footer>
+    </div>
 
-<script>
-// Мини-игра
-document.addEventListener('DOMContentLoaded', function() {
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const startBtn = document.getElementById('startGame');
-const scoreElement = document.getElementById('score');
-const timeElement = document.getElementById('time');
-
-let gameRunning = false;
-let score = 0;
-let gameTime = 0;
-let gameTimer;
-
-// Загружаем картинки
-const dinoImg = new Image();
-dinoImg.src = "cat.png"; // персонаж
-
-const obstacleImg = new Image();
-obstacleImg.src = "cactus.png"; // препятствие
-
-let dino = { x: 50, y: 150, width: 30, height: 30, jumping: false, velocity: 0 };
-let obstacles = [];
-let coins = [];
-let lastObstacleTime = 0;
-
-function startGame() {
-  gameRunning = true;
-  score = 0;
-  gameTime = 0;
-  obstacles = [];
-  coins = [];
-  dino.y = 150;
-  dino.jumping = false;
-  scoreElement.textContent = score;
-  timeElement.textContent = gameTime;
-
-  clearInterval(gameTimer);
-  gameTimer = setInterval(() => {
-    if (gameRunning) {
-      gameTime++;
-      timeElement.textContent = gameTime;
-    }
-  }, 1000);
-
-  requestAnimationFrame(gameLoop);
-}
-
-function drawDino() {
-  ctx.drawImage(dinoImg, dino.x, dino.y - (64 - dino.height), 64, 64);
-}
-
-function updateDino() {
-  if (dino.jumping) {
-    dino.y += dino.velocity;
-    dino.velocity += 0.5;
-    if (dino.y >= 150) {
-      dino.y = 150;
-      dino.jumping = false;
-    }
-  }
-}
-
-function jump() {
-  if (!dino.jumping) {
-    dino.jumping = true;
-    dino.velocity = -12;
-  }
-}
-
-function gameLoop(timestamp) {
-  if (!gameRunning) return;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  updateDino();
-  drawDino();
-
-  // препятствия — проверка времени, чтобы не слишком часто
-  if (timestamp - lastObstacleTime > 1500 && Math.random() < 0.02) {
-    obstacles.push({ x: canvas.width, y: 150, width: 20, height: 30 });
-    lastObstacleTime = timestamp;
-  }
-
-  // монетки
-  if (Math.random() < 0.01) {
-    coins.push({ x: canvas.width, y: 100, width: 15, height: 15, collected: false });
-  }
-
-  // обработка препятствий
-  for (let i = 0; i < obstacles.length; i++) {
-    obstacles[i].x -= 5;
-    ctx.drawImage(obstacleImg, obstacles[i].x, obstacles[i].y - (64 - obstacles[i].height), 64, 64);
-    if (checkCollision(dino, obstacles[i])) {
-      gameRunning = false;
-      clearInterval(gameTimer);
-      alert(`Игра окончена! Ваш счёт: ${score}. Время: ${gameTime} сек`);
-      return;
-    }
-    if (obstacles[i].x < -64) { obstacles.splice(i, 1); i--; }
-  }
-
-  // обработка монеток
-  for (let i = 0; i < coins.length; i++) {
-    if (!coins[i].collected) {
-      coins[i].x -= 5;
-      ctx.fillStyle = '#ffd700';
-      ctx.beginPath();
-      ctx.arc(coins[i].x + coins[i].width/2, coins[i].y + coins[i].height/2, coins[i].width/2, 0, Math.PI*2);
-      ctx.fill();
-      if (checkCollision(dino, coins[i])) {
-        coins[i].collected = true;
-        score += 10;
-        scoreElement.textContent = score;
-      }
-    }
-    if (coins[i].x < -20) { coins.splice(i, 1); i--; }
-  }
-
-  requestAnimationFrame(gameLoop);
-}
-
-function checkCollision(a, b) {
-  return a.x < b.x + b.width &&
-         a.x + a.width > b.x &&
-         a.y < b.y + b.height &&
-         a.y + a.height > b.y;
-}
-
-startBtn.addEventListener('click', startGame);
-document.addEventListener('keydown', e => { if (e.code === 'Space' && gameRunning) { jump(); e.preventDefault(); } });
-canvas.addEventListener('click', () => { if (gameRunning) jump(); });
-});
-
-// Сольный проект
-document.getElementById('soloBtn').addEventListener('click', function(e) {
-e.preventDefault();
-const soloSection = document.getElementById('solo');
-const isHidden = soloSection.style.display !== 'block';
-soloSection.style.display = isHidden ? 'block' : 'none';
-if (isHidden) {
-setTimeout(() => soloSection.scrollIntoView({ behavior: 'smooth' }), 100);
-}
-});
-
-// Модальное окно для фото
-const modal = document.getElementById("imageModal");
-const img = document.getElementById("profileImage");
-const modalImg = document.getElementById("modalImage");
-const span = document.getElementsByClassName("close")[0];
-img.onclick = function() { modal.style.display = "block"; modalImg.src = this.src; document.body.style.overflow = "hidden"; }
-span.onclick = function() { modal.style.display = "none"; document.body.style.overflow = "auto"; }
-window.onclick = function(event) { if (event.target == modal) { modal.style.display = "none"; document.body.style.overflow = "auto"; } }
-
-// Карусель галереи
-document.addEventListener('DOMContentLoaded', function() {
-const carousel = document.querySelector('.carousel-container');
-const items = carousel.querySelectorAll('img');
-const prevBtn = document.querySelector('.carousel-prev');
-const nextBtn = document.querySelector('.carousel-next');
-let currentIndex = 0;
-function updateCarousel() { carousel.style.transform = `translateX(-${currentIndex * 100}%)`; }
-nextBtn.addEventListener('click', () => { currentIndex = (currentIndex + 1) % items.length; updateCarousel(); });
-prevBtn.addEventListener('click', () => { currentIndex = (currentIndex - 1 + items.length) % items.length; updateCarousel(); });
-setInterval(() => { currentIndex = (currentIndex + 1) % items.length; updateCarousel(); }, 5000);
-});
-</script>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -7,12 +7,39 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {margin:0; font-family:sans-serif; background:#f4f4f4; text-align:center; overflow-x:hidden;}
-        .game-container {position:relative; max-width:100%; margin:16px auto; overflow:hidden;}
-        canvas {display:block; margin:0 auto; border-radius:10px; max-width:100%;}
-        #playBtn {position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-            padding:14px 28px; font-size:18px; font-weight:bold; background:#ff6600; color:#fff; border:none; border-radius:10px; cursor:pointer; z-index:10;}
-        .game-stats {margin-top:8px; font-size:18px; font-weight:bold;}
+        /* === Стили для игры === */
+        .game-container {
+            position: relative;
+            max-width: 100%;
+            margin: 16px auto;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 10px;
+            max-width: 100%;
+        }
+        #playBtn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            padding: 14px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            background: #ff6600;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .game-stats {
+            margin-top: 8px;
+            font-size: 18px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -92,71 +119,58 @@ const playBtn = document.getElementById("playBtn");
 const timeEl = document.getElementById("time");
 const coinsEl = document.getElementById("coins");
 
-let scale = 1, gameRunning = false;
-let cat = new Image(), cactus = new Image();
-cat.src = 'cat.png';
-cactus.src = 'cactus.png';
+let cw, ch, scale;
+let cat = new Image();
+let cactus = new Image();
+cat.src = "cat.png";
+cactus.src = "cactus.png";
 
-let cw, ch, catObj, obstacles = [], coins = [], speed, frame, timer, coinCount;
+let catObj, obstacles=[], coins=[], speed, frame, timer, coinCount;
+let gameRunning=false;
 
-function resize() {
-    cw = Math.min(window.innerWidth - 16, 600);
-    ch = Math.floor(cw / 3);
-    scale = cw / 600;
+function resize(){
+    cw = Math.min(window.innerWidth-16,600);
+    ch = Math.floor(cw/3);
+    scale = cw/600;
     canvas.width = cw;
     canvas.height = ch;
 }
-window.addEventListener('resize', resize);
+window.addEventListener('resize',resize);
 resize();
 
-function resetGame() {
+function resetGame(){
     catObj = {x:50*scale, y:ch-64*scale-10*scale, w:64*scale, h:64*scale, vy:0, gravity:0.7*scale, jump:-12*scale, grounded:true};
-    obstacles = [];
-    coins = [];
-    speed = 6*scale;
-    frame = 0;
-    timer=0;
-    coinCount=0;
-    timeEl.textContent = '0';
-    coinsEl.textContent = '0';
-    gameRunning=true;
-    playBtn.style.display='none';
+    obstacles=[]; coins=[]; speed=6*scale; frame=0; timer=0; coinCount=0;
+    timeEl.textContent='0'; coinsEl.textContent='0'; gameRunning=true; playBtn.style.display='none';
 }
 
-function spawnObstacle() {
-    let last = obstacles.length>0? obstacles[obstacles.length-1].x : cw;
-    let gap = 150*scale + Math.random()*150*scale;
+function spawnObstacle(){
+    let last = obstacles.length>0?obstacles[obstacles.length-1].x:cw;
+    let gap = 150*scale+Math.random()*150*scale;
     obstacles.push({x:last+gap, y:ch-64*scale-10*scale, w:64*scale, h:64*scale});
 }
 
-function spawnCoin() {
-    let last = coins.length>0? coins[coins.length-1].x : cw;
+function spawnCoin(){
+    let last = coins.length>0?coins[coins.length-1].x:cw;
     let gap = 100*scale + Math.random()*150*scale;
     let height = ch-100*scale - Math.random()*50*scale;
     coins.push({x:last+gap, y:height, r:14*scale});
 }
 
-function update() {
+function update(){
     if(!gameRunning) return;
-
-    // прыжок и гравитация
     catObj.vy += catObj.gravity;
     catObj.y += catObj.vy;
-    if(catObj.y >= ch-64*scale-10*scale){catObj.y=ch-64*scale-10*scale; catObj.vy=0; catObj.grounded=true;} 
-    else catObj.grounded=false;
-
-    // движение препятствий и монет
+    if(catObj.y>=ch-64*scale-10*scale){catObj.y=ch-64*scale-10*scale; catObj.vy=0; catObj.grounded=true;} else catObj.grounded=false;
     obstacles.forEach(o=>o.x-=speed);
     coins.forEach(c=>c.x-=speed);
 
-    // столкновение с препятствиями
     for(let o of obstacles){
-        if(catObj.x < o.x+o.w && catObj.x+catObj.w>o.x && catObj.y<o.y+o.h && catObj.y+catObj.h>o.y){
+        if(catObj.x<o.x+o.w && catObj.x+catObj.w>o.x && catObj.y<o.y+o.h && catObj.y+catObj.h>o.y){
             gameRunning=false; playBtn.style.display='block'; playBtn.textContent='Играть снова';
         }
     }
 
-    // сбор монет
     for(let i=coins.length-1;i>=0;i--){
         let c=coins[i];
         if(catObj.x< c.x+c.r && catObj.x+catObj.w>c.x-c.r && catObj.y< c.y+c.r && catObj.y+catObj.h>c.y-c.r){
@@ -164,56 +178,35 @@ function update() {
         }
     }
 
-    // удаление вышедших за экран
     obstacles = obstacles.filter(o=>o.x+o.w>0);
     coins = coins.filter(c=>c.x+c.r>0);
 
-    // спавн
     if(frame%90==0) spawnObstacle();
     if(frame%60==0) spawnCoin();
-
     frame++;
 }
 
-function draw() {
-    // фон
+function draw(){
     ctx.fillStyle='#cceeff';
     ctx.fillRect(0,0,cw,ch*0.75);
     ctx.fillStyle='#88cc88';
     ctx.fillRect(0,ch*0.75,cw,ch*0.25);
-
-    // кот
     ctx.drawImage(cat, catObj.x, catObj.y, catObj.w, catObj.h);
-
-    // препятствия
     obstacles.forEach(o=>ctx.drawImage(cactus,o.x,o.y,o.w,o.h));
-
-    // монетки
     coins.forEach(c=>{
         ctx.beginPath();
         ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
-        ctx.fillStyle='#FFD700';
-        ctx.fill();
-        ctx.strokeStyle='#DAA520';
-        ctx.stroke();
+        ctx.fillStyle='#FFD700'; ctx.fill();
+        ctx.strokeStyle='#DAA520'; ctx.stroke();
     });
 }
 
-function loop(){
-    update();
-    draw();
-    requestAnimationFrame(loop);
-}
-
-function jump(){
-    if(gameRunning && catObj.grounded){catObj.vy=catObj.jump;}
-}
+function loop(){update(); draw(); requestAnimationFrame(loop);}
+function jump(){if(gameRunning && catObj.grounded) catObj.vy=catObj.jump;}
 
 canvas.addEventListener('click',jump);
 canvas.addEventListener('touchstart',jump);
-
 playBtn.addEventListener('click',()=>{resetGame();});
-
 setInterval(()=>{if(gameRunning){timer++; timeEl.textContent=timer;}},1000);
 
 loop();

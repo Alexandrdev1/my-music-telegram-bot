@@ -119,6 +119,13 @@
         let score = 0;
         let gameTime = 0;
         let gameTimer;
+
+        // Загружаем картинки
+        const dinoImg = new Image();
+        dinoImg.src = "cat.png"; // персонаж
+
+        const obstacleImg = new Image();
+        obstacleImg.src = "cactus.png"; // препятствие
         
         let dino = { x: 50, y: 150, width: 30, height: 30, jumping: false, velocity: 0 };
         let obstacles = [];
@@ -147,8 +154,7 @@
         }
         
         function drawDino() {
-            ctx.fillStyle = '#ff6b6b';
-            ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+            ctx.drawImage(dinoImg, dino.x, dino.y - (64 - dino.height), 64, 64);
         }
         
         function updateDino() {
@@ -188,15 +194,17 @@
             // обработка препятствий
             for (let i = 0; i < obstacles.length; i++) {
                 obstacles[i].x -= 5;
-                ctx.fillStyle = '#86868b';
-                ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].width, obstacles[i].height);
+                ctx.drawImage(obstacleImg, obstacles[i].x, obstacles[i].y - (64 - obstacles[i].height), 64, 64);
                 if (checkCollision(dino, obstacles[i])) {
                     gameRunning = false;
                     clearInterval(gameTimer);
                     alert(`Игра окончена! Ваш счёт: ${score}. Время: ${gameTime} сек`);
                     return;
                 }
-                if (obstacles[i].x < -20) { obstacles.splice(i, 1); i--; }
+                if (obstacles[i].x < -64) {
+                    obstacles.splice(i, 1);
+                    i--;
+                }
             }
             
             // обработка монеток

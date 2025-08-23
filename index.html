@@ -20,6 +20,19 @@
             <h2>Обо мне</h2>
             <p>Гитарист. Один из основателей группы НЕ ОН.</p>
         </section>
+        <!-- Фотогалерея -->
+<section class="gallery">
+    <h2>Фотогалерея</h2>
+    <div class="carousel">
+        <div class="carousel-container">
+            <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/main/photo1.jpg" alt="Фото 1">
+            <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/main/photo2.jpg" alt="Фото 2">
+            <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/main/photo3.jpg" alt="Фото 3">
+        </div>
+        <button class="carousel-prev">❮</button>
+        <button class="carousel-next">❯</button>
+    </div>
+</section>
 
         <section class="music">
             <h2>Проекты</h2>
@@ -116,6 +129,35 @@
             }
         }
     </script>
-
+<script>
+    // Карусель галереи
+    document.addEventListener('DOMContentLoaded', function() {
+        const carousel = document.querySelector('.carousel-container');
+        const items = carousel.querySelectorAll('img');
+        const prevBtn = document.querySelector('.carousel-prev');
+        const nextBtn = document.querySelector('.carousel-next');
+        let currentIndex = 0;
+        
+        function updateCarousel() {
+            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+        
+        nextBtn.addEventListener('click', function() {
+            currentIndex = (currentIndex + 1) % items.length;
+            updateCarousel();
+        });
+        
+        prevBtn.addEventListener('click', function() {
+            currentIndex = (currentIndex - 1 + items.length) % items.length;
+            updateCarousel();
+        });
+        
+        // Автопрокрутка каждые 5 секунд
+        setInterval(function() {
+            currentIndex = (currentIndex + 1) % items.length;
+            updateCarousel();
+        }, 5000);
+    });
+</script>
 </body>
 </html>

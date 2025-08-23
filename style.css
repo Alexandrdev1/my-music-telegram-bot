@@ -1,17 +1,191 @@
-// Переключение вкладок
-document.querySelectorAll('.tab-btn').forEach(button => {
-    button.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-        
-        button.classList.add('active');
-        const tabId = button.getAttribute('data-tab');
-        document.getElementById(tabId).classList.add('active');
-    });
-});
+:root {
+  --primary-color: #ff4c60;
+  --text-primary: #fff;
+  --text-secondary: #aaa;
+  --bg-color: #121212;
+  --neon-color: #ff4c60;
+}
 
-// Заглушка для Instagram
-document.querySelector('.instagram-disabled').addEventListener('click', function(e) {
-    e.preventDefault();
-    alert('Instagram в разработке. Скоро будет доступен!');
-});
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.profile-img {
+  width: 180px;
+  border-radius: 50%;
+  margin: 20px 0;
+}
+
+h1, h2 {
+  margin: 10px 0;
+}
+
+.tagline {
+  color: var(--text-secondary);
+}
+
+.link-btn {
+  display: inline-block;
+  padding: 12px 20px;
+  margin: 10px;
+  border-radius: 8px;
+  background: var(--primary-color);
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.link-btn:hover {
+  opacity: 0.8;
+}
+
+.main-buttons {
+  margin: 20px 0;
+}
+
+.so-block {
+  display: none;
+  margin: 20px 0;
+  padding: 15px;
+  background: #1e1e1e;
+  border-radius: 10px;
+}
+.so-block.active {
+  display: block;
+}
+
+.game-section {
+  margin: 30px 0;
+}
+#gameCanvas {
+  border: 2px solid #333;
+  border-radius: 8px;
+  background: #fff;
+  width: 100%;
+  max-width: 400px;
+  display: block;
+  margin: auto;
+}
+
+.game-stats {
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.services ul {
+  list-style: none;
+  padding: 0;
+}
+.services li {
+  margin: 10px 0;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.instagram-disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  position: relative;
+}
+.instagram-disabled::after {
+  content: "Скоро";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--neon-color);
+  color: white;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+footer {
+  margin-top: 30px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.back-button-top {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: var(--primary-color);
+  font-size: 24px;
+  text-decoration: none;
+}
+
+/* ------------------ АДАПТИВНОСТЬ ------------------ */
+@media (max-width: 768px) {
+  .profile-img {
+    width: 140px;
+  }
+
+  .link-btn {
+    width: 90%;
+    margin: 8px auto;
+  }
+
+  .main-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .so-block {
+    padding: 12px;
+  }
+
+  #gameCanvas {
+    width: 100%;
+  }
+
+  .game-stats {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-img {
+    width: 120px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  .link-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}

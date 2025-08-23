@@ -2,502 +2,120 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Абрамов Александр - Музыкант</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* === Стили для игры === */
-        .game-container {
-            position: relative;
-            max-width: 100%;
-            margin: 16px auto;
-            overflow: hidden;
-        }
-        canvas {
-            display: block;
-            margin: 0 auto;
-            border-radius: 10px;
-            max-width: 100%;
-            background: #cceeff;
-            border: 2px solid #333;
-        }
-        #playBtn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50%);
-            padding: 14px 28px;
-            font-size: 18px;
-            font-weight: bold;
-            background: #ff6600;
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            z-index: 10;
-            transition: all 0.3s ease;
-        }
-        #playBtn:hover {
-            background: #ff8800;
-            transform: translate(-50%, -50%) scale(1.05);
-        }
-        .game-stats {
-            margin-top: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-        }
-        
-        /* Общие стили для остального контента */
-        .container {
-            max-width: 680px;
-            margin: 20px auto;
-            padding: 30px;
-            background-color: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
-        
-        .profile-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .project-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 25px 15px;
-            text-decoration: none;
-            border-radius: 16px;
-            font-weight: 600;
-            font-size: 18px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            min-height: 140px;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .solo-project {
-            display: none;
-            background-color: #f5f5f7;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 20px;
-        }
-        
-        .link-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background-color: #007aff;
-            color: #ffffff;
-            padding: 12px 18px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-    </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/refs/heads/main/Обложка.jpg" alt="Абрамов Александр" class="profile-img" id="profileImage">
-        <h1>Абрамов Александр</h1>
-        <p class="tagline">Музыкант</p>
-    </header>
+    <div class="container">
+        <header>
+            <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/refs/heads/main/Обложка.jpg" alt="Абрамов Александр" class="profile-img" id="profileImage">
+            <h1>Абрамов Александр</h1>
+            <p class="tagline">Музыкант</p>
+        </header>
 
-    <section class="about">
-        <h2>Обо мне</h2>
-        <p>Гитарист. Один из основателей группы НЕ ОН.</p>
-    </section>
+        <section class="about">
+            <h2>Обо мне</h2>
+            <p>Гитарист. Один из основателей группы НЕ ОН.</p>
+        </section>
 
-    <section class="music">
-        <h2>Проекты</h2>
-        <div class="project-grid">
-            <a href="neon.html" class="project-card neon-card">
-                <div class="project-icon"><i class="fas fa-users"></i></div>
-                <span>НЕ ОН</span>
-            </a>
-            <a href="#solo" class="project-card solo-card" id="soloBtn">
-                <div class="project-icon"><i class="fas fa-user"></i></div>
-                <span>so so</span>
-            </a>
-        </div>
-        <div id="solo" class="solo-project">
-            <h3>so so</h3>
-            <p>Сольный проект</p>
-            <div class="solo-links">
-                <a href="https://t.me/sssssssooo1" class="link-btn"><i class="fab fa-telegram"></i> Telegram</a>
-                <a href="https://music.yandex.ru/artist/24305033" class="link-btn"><i class="fab fa-yandex"></i> Яндекс.Музыка</a>
+        <section class="music">
+            <h2>Проекты</h2>
+            <div class="project-grid">
+                <a href="neon.html" class="project-card neon-card">
+                    <div class="project-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <span>НЕ ОН</span>
+                </a>
+                <a href="#solo" class="project-card solo-card" id="soloBtn">
+                    <div class="project-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>so so</span>
+                </a>
             </div>
-        </div>
-    </section>
+            
+            <!-- Сольный проект - СКРЫТ ПО УМОЛЧАНИЮ -->
+            <div id="solo" class="solo-project">
+                <h3>so so</h3>
+                <p>Сольный проект</p>
+                <div class="solo-links">
+                    <a href="https://t.me/sssssssooo1" class="link-btn"><i class="fab fa-telegram"></i> Telegram</a>
+                    <a href="https://music.yandex.ru/artist/24305033" class="link-btn"><i class="fab fa-yandex"></i> Яндекс.Музыка</a>
+                </div>
+            </div>
+        </section>
 
-    <section class="services">
-        <h2>Услуги</h2>
-        <ul>
-            <li>Написание музыки — <strong>5000 ₽</strong></li>
-            <li>Уроки по гитаре (60 мин) — <strong>1000 ₽</strong></li>
-            <li>? — <strong>2000 ₽</strong></li>
-        </ul>
-        <p>Заказать услугу: <a href="https://t.me/Alexandrdev1">@Alexandrdev1</a></p>
-    </section>
+        <section class="services">
+            <h2>Услуги</h2>
+            <ul>
+                <li>Написание музыки — <strong>5000 ₽</strong></li>
+                <li>Уроки по гитаре (60 мин) — <strong>1000 ₽</strong></li>
+                <li>? — <strong>2000 ₽</strong></li>
+            </ul>
+            <p>Заказать услугу: <a href="https://t.me/Alexandrdev1">@Alexandrdev1</a></p>
+        </section>
 
-    <section class="donate">
-        <h2>Поддержать творчество</h2>
-        <p>Если вам нравится моя музыка, вы можете поддержать меня донатом. Каждая копейка пойдет на создание новой музыки и развитие проекта. Спасибо!</p>
-        <a href="https://tips.yandex.ru/guest/payment/3400836" class="link-btn" style="margin-top:15px;"><i class="fas fa-hand-holding-heart"></i> Поддержать на Яндекс.Деньги</a>
-    </section>
+        <section class="donate">
+            <h2>Поддержать творчество</h2>
+            <p>Если вам нравится моя музыка, вы можете поддержать меня донатом. Каждая копейка пойдет на создание новой музыки и развитие проекта. Спасибо!</p>
+            <a href="https://tips.yandex.ru/guest/payment/3400836" class="link-btn" style="margin-top: 15px;"><i class="fas fa-hand-holding-heart"></i> Поддержать на Яндекс.Деньги</a>
+        </section>
 
-    <!-- === МИНИ ИГРА === -->
-    <section class="game">
-        <h2>Мини игра - Дикий кот</h2>
-        <div class="game-container" id="gameContainer">
-            <canvas id="gameCanvas" width="600" height="200"></canvas>
-            <button id="playBtn">▶ Play</button>
-        </div>
-        <div class="game-stats">
-            Время: <span id="time">0</span> сек | Монетки: <span id="coins">0</span>
-        </div>
-        <p style="text-align:center">Нажми Пробел или кликни, чтобы прыгнуть 🐱</p>
-    </section>
+        <footer>
+            <p>Свяжитесь со мной: <a href="https://t.me/Alexandrdev1">Telegram</a> | <a href="mailto:abramov.aleksandr.99@icloud.com">Email</a></p>
+        </footer>
+    </div>
 
-    <footer>
-        <p>Свяжитесь со мной: <a href="https://t.me/Alexandrdev1">Telegram</a> | <a href="mailto:abramov.aleksandr.99@icloud.com">Email</a></p>
-    </footer>
-</div>
+    <!-- Модальное окно для фото -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
 
-<script>
-// ========== ПЕРЕПИСАННАЯ ИГРА С НУЛЯ ==========
-
-document.addEventListener('DOMContentLoaded', function() {
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const playBtn = document.getElementById('playBtn');
-    const timeEl = document.getElementById('time');
-    const coinsEl = document.getElementById('coins');
-    
-    // Настройка размеров canvas
-    function resizeCanvas() {
-        const container = document.getElementById('gameContainer');
-        const maxWidth = Math.min(container.clientWidth, 600);
-        canvas.width = maxWidth;
-        canvas.height = 200;
-    }
-    
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    
-    // Загрузка изображений
-    const catImg = new Image();
-    const cactusImg = new Image();
-    const coinImg = new Image();
-    
-    catImg.src = 'https://i.ibb.co/xDZwXHY/cat.png';
-    cactusImg.src = 'https://i.ibb.co/6JRbhzx/cactus.png';
-    coinImg.src = 'https://upload.wikimedia.org/wikipedia/commons/4/4e/Emoji_u1f4b0.svg';
-    
-    // Игровые переменные
-    let gameRunning = false;
-    let gameSpeed = 5;
-    let score = 0;
-    let coins = 0;
-    let frameCount = 0;
-    let lastObstacleTime = 0;
-    let lastCoinTime = 0;
-    
-    // Объект кота
-    const cat = {
-        x: 50,
-        y: 150,
-        width: 40,
-        height: 40,
-        velocity: 0,
-        gravity: 0.8,
-        jumpStrength: -15,
-        isJumping: false,
-        
-        update: function() {
-            this.velocity += this.gravity;
-            this.y += this.velocity;
-            
-            // Проверка земли
-            if (this.y > 150) {
-                this.y = 150;
-                this.velocity = 0;
-                this.isJumping = false;
-            }
-        },
-        
-        jump: function() {
-            if (!this.isJumping) {
-                this.velocity = this.jumpStrength;
-                this.isJumping = true;
-            }
-        },
-        
-        draw: function() {
-            if (catImg.complete) {
-                ctx.drawImage(catImg, this.x, this.y, this.width, this.height);
-            } else {
-                // Запасной вариант, если изображение не загрузилось
-                ctx.fillStyle = '#ff6b6b';
-                ctx.fillRect(this.x, this.y, this.width, this.height);
-            }
-        }
-    };
-    
-    // Массивы объектов
-    let obstacles = [];
-    let coinItems = [];
-    
-    // Класс препятствия
-    class Obstacle {
-        constructor() {
-            this.width = 30;
-            this.height = 50;
-            this.x = canvas.width;
-            this.y = 150;
-            this.speed = gameSpeed;
-            
-            // Случайное расстояние до следующего препятствия (от 250 до 500px)
-            this.nextGap = 250 + Math.random() * 250;
-        }
-        
-        update() {
-            this.x -= this.speed;
-        }
-        
-        draw() {
-            if (cactusImg.complete) {
-                ctx.drawImage(cactusImg, this.x, this.y - this.height + 10, this.width, this.height);
-            } else {
-                // Запасной вариант
-                ctx.fillStyle = '#2ecc71';
-                ctx.fillRect(this.x, this.y - this.height + 10, this.width, this.height);
-            }
-        }
-        
-        isOffscreen() {
-            return this.x + this.width < 0;
-        }
-        
-        collidesWith(obj) {
-            return this.x < obj.x + obj.width &&
-                   this.x + this.width > obj.x &&
-                   this.y - this.height + 10 < obj.y + obj.height &&
-                   this.y + 10 > obj.y;
-        }
-    }
-    
-    // Класс монетки
-    class Coin {
-        constructor() {
-            this.radius = 10;
-            this.x = canvas.width;
-            this.y = 100 + Math.random() * 50;
-            this.speed = gameSpeed;
-            this.collected = false;
-        }
-        
-        update() {
-            this.x -= this.speed;
-        }
-        
-        draw() {
-            if (!this.collected) {
-                if (coinImg.complete) {
-                    ctx.drawImage(coinImg, this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2);
-                } else {
-                    // Запасной вариант
-                    ctx.fillStyle = '#FFD700';
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
-        }
-        
-        isOffscreen() {
-            return this.x + this.radius < 0;
-        }
-        
-        collidesWith(obj) {
-            if (this.collected) return false;
-            
-            const dx = this.x - (obj.x + obj.width/2);
-            const dy = this.y - (obj.y + obj.height/2);
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            return distance < this.radius + Math.max(obj.width, obj.height)/2;
-        }
-    }
-    
-    // Функция сброса игры
-    function resetGame() {
-        gameRunning = true;
-        score = 0;
-        coins = 0;
-        frameCount = 0;
-        lastObstacleTime = 0;
-        lastCoinTime = 0;
-        obstacles = [];
-        coinItems = [];
-        gameSpeed = 5;
-        
-        cat.y = 150;
-        cat.velocity = 0;
-        cat.isJumping = false;
-        
-        timeEl.textContent = '0';
-        coinsEl.textContent = '0';
-        playBtn.style.display = 'none';
-    }
-    
-    // Функция завершения игры
-    function endGame() {
-        gameRunning = false;
-        playBtn.textContent = 'Играть снова';
-        playBtn.style.display = 'block';
-    }
-    
-    // Основной игровой цикл
-    function gameLoop() {
-        if (!gameRunning) return;
-        
-        // Очистка canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // Рисуем фон
-        ctx.fillStyle = '#cceeff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height * 0.75);
-        ctx.fillStyle = '#88cc88';
-        ctx.fillRect(0, canvas.height * 0.75, canvas.width, canvas.height * 0.25);
-        
-        // Обновление и отрисовка кота
-        cat.update();
-        cat.draw();
-        
-        // Генерация препятствий (не чаще чем каждые 90 кадров)
-        if (frameCount - lastObstacleTime > 90 && Math.random() < 0.02) {
-            obstacles.push(new Obstacle());
-            lastObstacleTime = frameCount;
-        }
-        
-        // Генерация монеток (не чаще чем каждые 120 кадров)
-        if (frameCount - lastCoinTime > 120 && Math.random() < 0.015) {
-            coinItems.push(new Coin());
-            lastCoinTime = frameCount;
-        }
-        
-        // Обновление и отрисовка препятствий
-        for (let i = obstacles.length - 1; i >= 0; i--) {
-            obstacles[i].update();
-            obstacles[i].draw();
-            
-            // Проверка столкновений
-            if (obstacles[i].collidesWith(cat)) {
-                endGame();
-                return;
-            }
-            
-            // Удаление вышедших за границы препятствий
-            if (obstacles[i].isOffscreen()) {
-                obstacles.splice(i, 1);
-            }
-        }
-        
-        // Обновление и отрисовка монеток
-        for (let i = coinItems.length - 1; i >= 0; i--) {
-            coinItems[i].update();
-            coinItems[i].draw();
-            
-            // Проверка сбора монеток
-            if (coinItems[i].collidesWith(cat)) {
-                coinItems[i].collected = true;
-                coins++;
-                coinsEl.textContent = coins;
-                coinItems.splice(i, 1);
-            }
-            
-            // Удаление вышедших за границы монеток
-            else if (coinItems[i].isOffscreen()) {
-                coinItems.splice(i, 1);
-            }
-        }
-        
-        // Увеличение скорости со временем
-        if (frameCount % 500 === 0) {
-            gameSpeed += 0.5;
-        }
-        
-        // Обновление счета (времени)
-        if (frameCount % 60 === 0) {
-            score++;
-            timeEl.textContent = score;
-        }
-        
-        frameCount++;
-        requestAnimationFrame(gameLoop);
-    }
-    
-    // Обработчики событий
-    playBtn.addEventListener('click', function() {
-        resetGame();
-        gameLoop();
-    });
-    
-    document.addEventListener('keydown', function(e) {
-        if (e.code === 'Space' && gameRunning) {
-            cat.jump();
+    <script>
+        // Показ/скрытие информации о сольном проекте
+        document.getElementById('soloBtn').addEventListener('click', function(e) {
             e.preventDefault();
+            const soloSection = document.getElementById('solo');
+            const isHidden = soloSection.style.display !== 'block';
+            
+            soloSection.style.display = isHidden ? 'block' : 'none';
+            
+            if (isHidden) {
+                setTimeout(() => {
+                    soloSection.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        });
+
+        // Модальное окно для фото
+        const modal = document.getElementById("imageModal");
+        const img = document.getElementById("profileImage");
+        const modalImg = document.getElementById("modalImage");
+        const span = document.getElementsByClassName("close")[0];
+
+        img.onclick = function() {
+            modal.style.display = "block";
+            modalImg.src = this.src;
+            document.body.style.overflow = "hidden";
         }
-    });
-    
-    canvas.addEventListener('click', function() {
-        if (gameRunning) {
-            cat.jump();
+
+        span.onclick = function() {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
         }
-    });
-    
-    canvas.addEventListener('touchstart', function(e) {
-        if (gameRunning) {
-            cat.jump();
-            e.preventDefault();
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.body.style.overflow = "auto";
+            }
         }
-    });
-    
-    // Обработчики для других элементов страницы
-    document.getElementById('soloBtn').addEventListener('click', function(e) {
-        e.preventDefault();
-        const soloSection = document.getElementById('solo');
-        const isHidden = soloSection.style.display !== 'block';
-        
-        soloSection.style.display = isHidden ? 'block' : 'none';
-        
-        if (isHidden) {
-            setTimeout(() => {
-                soloSection.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-        }
-    });
-});
-</script>
+    </script>
+
 </body>
 </html>

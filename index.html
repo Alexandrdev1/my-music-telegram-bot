@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Абрамов Александр - Музыкант</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -10,7 +10,8 @@
         /* Стили для игры */
         .game-container {
             text-align: center;
-            margin: 30px auto;
+            margin: 20px auto;
+            max-width: 100%;
         }
         canvas {
             background: #cceeff;
@@ -18,12 +19,28 @@
             border-radius: 10px;
             display: block;
             margin: 0 auto;
-            touch-action: manipulation; /* для мобильных */
+            width: 100%;
+            height: auto;
+            max-width: 600px;
+            touch-action: manipulation;
         }
         .game-stats {
             margin-top: 10px;
             font-size: 18px;
             font-weight: bold;
+        }
+        #playBtn {
+            position: absolute;
+            top: 50%;left: 50%;
+            transform: translate(-50%,-50%);
+            padding:15px 30px;
+            font-size:20px;
+            font-weight:bold;
+            background:#ff6600;
+            color:#fff;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
         }
     </style>
 </head>
@@ -88,14 +105,9 @@
         <!-- МИНИ-ИГРА -->
         <section class="game-container">
             <h2>Мини игра - Дикий кот</h2>
-            <div style="position: relative; display: inline-block;">
+            <div style="position: relative; display: inline-block; max-width:100%;">
                 <canvas id="gameCanvas" width="600" height="200"></canvas>
-                <button id="playBtn" 
-                        style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-                               padding:15px 30px;font-size:20px;font-weight:bold;
-                               background:#ff6600;color:#fff;border:none;border-radius:10px;cursor:pointer;">
-                    ▶ Play
-                </button>
+                <button id="playBtn">▶ Play</button>
             </div>
             <div class="game-stats">
                 Время: <span id="time">0</span> сек | Монетки: <span id="coins">0</span>
@@ -115,14 +127,12 @@
     </div>
 
     <script>
-        // Показ/скрытие информации о сольном проекте
+        // Сольный проект кнопка
         document.getElementById('soloBtn').addEventListener('click', function(e) {
             e.preventDefault();
             const soloSection = document.getElementById('solo');
             const isHidden = soloSection.style.display !== 'block';
-            
             soloSection.style.display = isHidden ? 'block' : 'none';
-            
             if (isHidden) {
                 setTimeout(() => {
                     soloSection.scrollIntoView({ behavior: 'smooth' });
@@ -135,24 +145,9 @@
         const img = document.getElementById("profileImage");
         const modalImg = document.getElementById("modalImage");
         const span = document.getElementsByClassName("close")[0];
-
-        img.onclick = function() {
-            modal.style.display = "block";
-            modalImg.src = this.src;
-            document.body.style.overflow = "hidden";
-        }
-
-        span.onclick = function() {
-            modal.style.display = "none";
-            document.body.style.overflow = "auto";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-                document.body.style.overflow = "auto";
-            }
-        }
+        img.onclick = () => { modal.style.display = "block"; modalImg.src = img.src; document.body.style.overflow = "hidden"; }
+        span.onclick = () => { modal.style.display = "none"; document.body.style.overflow = "auto"; }
+        window.onclick = e => { if (e.target == modal) { modal.style.display = "none"; document.body.style.overflow = "auto"; } }
 
         // ------------------ ИГРА ------------------
         const canvas = document.getElementById("gameCanvas");
@@ -160,24 +155,12 @@
         const playBtn = document.getElementById("playBtn");
 
         let gameRunning = false;
-        let gameOver = false;
 
-        let catImg = new Image();
-        catImg.src = "cat.png";
+        let catImg = new Image(); catImg.src = "cat.png";
+        let cactusImg = new Image(); cactusImg.src = "cactus.png";
+        let coinImg = new Image(); coinImg.src = "https://upload.wikimedia.org/wikipedia/commons/4/4e/Emoji_u1f4b0.svg";
 
-        let cactusImg = new Image();
-        cactusImg.src = "cactus.png";
-
-        let coinImg = new Image();
-        coinImg.src = "https://upload.wikimedia.org/wikipedia/commons/4/4e/Emoji_u1f4b0.svg";
-
-        let cat;
-        let obstacles;
-        let coins;
-        let time;
-        let coinCount;
-        let gameSpeed;
-        let lastObstacleTime;
+        let cat, obstacles, coins, time, coinCount, gameSpeed, lastObstacleTime;
 
         function resetGame() {
             cat = { x: 50, y: 150, w: 64, h: 64, vy: 0, jumpPower: -12, gravity: 0.6, grounded: true };
@@ -190,16 +173,16 @@
             document.getElementById("time").textContent = 0;
             document.getElementById("coins").textContent = 0;
             gameRunning = true;
-            gameOver = false;
             playBtn.style.display = "none";
         }
 
         function spawnObstacle() {
             let now = Date.now();
-            if (now - lastObstacleTime > 2000 + Math.random() * 1500) {
+            if (now - lastObstacleTime > 1500 + Math.random() * 1500) {
                 obstacles.push({ x: canvas.width, y: 136, w: 64, h: 64 });
                 if (Math.random() > 0.5) {
-                    coins.push({ x: canvas.width + 80, y: 100, w: 32, h: 32 });
+                    let coinY = [80, 110, 140][Math.floor(Math.random()*3)];
+                    coins.push({ x: canvas.width + 80, y: coinY, w: 32, h: 32 });
                 }
                 lastObstacleTime = now;
             }
@@ -207,42 +190,33 @@
 
         function update() {
             if (!gameRunning) return;
+            // физика кота
+            cat.y += cat.vy; cat.vy += cat.gravity;
+            if (cat.y >= 150) { cat.y = 150; cat.vy = 0; cat.grounded = true; }
 
-            cat.y += cat.vy;
-            cat.vy += cat.gravity;
-            if (cat.y >= 150) {
-                cat.y = 150;
-                cat.vy = 0;
-                cat.grounded = true;
-            }
-
+            // движение
             for (let o of obstacles) o.x -= gameSpeed;
             for (let c of coins) c.x -= gameSpeed;
 
+            // проверка столкновений
             for (let o of obstacles) {
-                if (cat.x < o.x + o.w &&
-                    cat.x + cat.w > o.x &&
-                    cat.y < o.y + o.h &&
-                    cat.y + cat.h > o.y) {
-                    gameOver = true;
+                if (cat.x < o.x + o.w && cat.x + cat.w > o.x && cat.y < o.y + o.h && cat.y + cat.h > o.y) {
                     gameRunning = false;
                     playBtn.textContent = "Играть снова";
                     playBtn.style.display = "block";
                 }
             }
 
+            // сбор монет
             for (let i = coins.length - 1; i >= 0; i--) {
                 let c = coins[i];
-                if (cat.x < c.x + c.w &&
-                    cat.x + cat.w > c.x &&
-                    cat.y < c.y + c.h &&
-                    cat.y + cat.h > c.y) {
-                    coinCount++;
-                    coins.splice(i, 1);
+                if (cat.x < c.x + c.w && cat.x + cat.w > c.x && cat.y < c.y + c.h && cat.y + cat.h > c.y) {
+                    coinCount++; coins.splice(i, 1);
                     document.getElementById("coins").textContent = coinCount;
                 }
             }
 
+            // очистка
             obstacles = obstacles.filter(o => o.x + o.w > 0);
             coins = coins.filter(c => c.x + c.w > 0);
 
@@ -251,44 +225,28 @@
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = "#88cc88";
-            ctx.fillRect(0, 190, canvas.width, 10);
-
+            ctx.fillStyle = "#88cc88"; ctx.fillRect(0, 190, canvas.width, 10); // земля
             ctx.drawImage(catImg, cat.x, cat.y, cat.w, cat.h);
-
             for (let o of obstacles) ctx.drawImage(cactusImg, o.x, o.y, o.w, o.h);
             for (let c of coins) ctx.drawImage(coinImg, c.x, c.y, c.w, c.h);
         }
 
         function loop() {
-            if (gameRunning) {
-                update();
-                draw();
-            }
+            if (gameRunning) { update(); draw(); }
             requestAnimationFrame(loop);
         }
 
         function jump() {
             if (gameRunning && cat.grounded) {
-                cat.vy = cat.jumpPower;
-                cat.grounded = false;
+                cat.vy = cat.jumpPower; cat.grounded = false;
             }
         }
 
         canvas.addEventListener("touchstart", jump);
         canvas.addEventListener("click", jump);
+        playBtn.addEventListener("click", resetGame);
 
-        playBtn.addEventListener("click", () => {
-            resetGame();
-        });
-
-        setInterval(() => {
-            if (gameRunning) {
-                time++;
-                document.getElementById("time").textContent = time;
-            }
-        }, 1000);
+        setInterval(() => { if (gameRunning) { time++; document.getElementById("time").textContent = time; } }, 1000);
 
         loop();
     </script>

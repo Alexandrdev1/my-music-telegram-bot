@@ -6,6 +6,58 @@
     <title>Абрамов Александр - Музыкант</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Стили для игры */
+        .game-section {
+            margin: 40px 0;
+            padding: 20px;
+            background-color: #f5f5f7;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .game-container {
+            position: relative;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        
+        #gameCanvas {
+            border: 2px solid #333;
+            border-radius: 8px;
+            background: #cceeff;
+            margin: 0 auto;
+            display: block;
+            max-width: 100%;
+        }
+        
+        #playBtn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            background: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .game-stats {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .game-instruction {
+            margin-top: 10px;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
 
@@ -65,6 +117,19 @@
             <a href="https://tips.yandex.ru/guest/payment/3400836" class="link-btn" style="margin-top: 15px;"><i class="fas fa-hand-holding-heart"></i> Поддержать на Яндекс.Деньги</a>
         </section>
 
+        <!-- Секция с игрой -->
+        <section class="game-section">
+            <h2>Мини-игра: Бегущий кот</h2>
+            <div class="game-container">
+                <canvas id="gameCanvas" width="600" height="200"></canvas>
+                <button id="playBtn">▶ Играть</button>
+            </div>
+            <div class="game-stats">
+                Счёт: <span id="score">0</span> | Рекорд: <span id="highScore">0</span>
+            </div>
+            <p class="game-instruction">Нажми ПРОБЕЛ или кликни, чтобы прыгнуть</p>
+        </section>
+
         <footer>
             <p>Свяжитесь со мной: <a href="https://t.me/Alexandrdev1">Telegram</a> | <a href="mailto:abramov.aleksandr.99@icloud.com">Email</a></p>
         </footer>
@@ -115,7 +180,223 @@
                 document.body.style.overflow = "auto";
             }
         }
-    </script>
 
+        // ========== КОД ИГРЫ ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+            const playBtn = document.getElementById('playBtn');
+            const scoreEl = document.getElementById('score');
+            const highScoreEl = document.getElementById('highScore');
+            
+            // Загрузка изображений
+            const catImg = new Image();
+            const cactusImg = new Image();
+            
+            catImg.src = 'https://i.ibb.co/xDZwXHY/cat.png';
+            cactusImg.src = 'https://i.ibb.co/6JRbhzx/cactus.png';
+            
+            // Настройка размеров canvas
+            function resizeCanvas() {
+                const container = document.querySelector('.game-container');
+                const maxWidth = Math.min(container.clientWidth, 600);
+                canvas.width = maxWidth;
+                canvas.height = 200;
+            }
+            
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            
+            // Игровые переменные
+            let gameRunning = false;
+            let score = 0;
+            let highScore = 0;
+            let gameSpeed = 5;
+            let frameCount = 0;
+            
+            // Объект кота
+            const cat = {
+                x: 50,
+                y: 150,
+                width: 40,
+                height: 40,
+                velocity: 0,
+                gravity: 0.8,
+                jumpStrength: -15,
+                isJumping: false,
+                
+                update: function() {
+                    this.velocity += this.gravity;
+                    this.y += this.velocity;
+                    
+                    // Проверка земли
+                    if (this.y > 150) {
+                        this.y = 150;
+                        this.velocity = 0;
+                        this.isJumping = false;
+                    }
+                },
+                
+                jump: function() {
+                    if (!this.isJumping) {
+                        this.velocity = this.jumpStrength;
+                        this.isJumping = true;
+                    }
+                },
+                
+                draw: function() {
+                    if (catImg.complete) {
+                        ctx.drawImage(catImg, this.x, this.y, this.width, this.height);
+                    } else {
+                        // Запасной вариант, если изображение не загрузилось
+                        ctx.fillStyle = '#ff6b6b';
+                        ctx.fillRect(this.x, this.y, this.width, this.height);
+                    }
+                }
+            };
+            
+            // Массив препятствий
+            let obstacles = [];
+            
+            // Класс препятствия
+            class Obstacle {
+                constructor() {
+                    this.width = 30;
+                    this.height = 50;
+                    this.x = canvas.width;
+                    this.y = 150;
+                    this.speed = gameSpeed;
+                }
+                
+                update() {
+                    this.x -= this.speed;
+                }
+                
+                draw() {
+                    if (cactusImg.complete) {
+                        ctx.drawImage(cactusImg, this.x, this.y - this.height + 10, this.width, this.height);
+                    } else {
+                        // Запасной вариант
+                        ctx.fillStyle = '#2ecc71';
+                        ctx.fillRect(this.x, this.y - this.height + 10, this.width, this.height);
+                    }
+                }
+                
+                isOffscreen() {
+                    return this.x + this.width < 0;
+                }
+                
+                collidesWith(obj) {
+                    return this.x < obj.x + obj.width &&
+                           this.x + this.width > obj.x &&
+                           this.y - this.height + 10 < obj.y + obj.height &&
+                           this.y + 10 > obj.y;
+                }
+            }
+            
+            // Функция сброса игры
+            function resetGame() {
+                gameRunning = true;
+                score = 0;
+                gameSpeed = 5;
+                frameCount = 0;
+                obstacles = [];
+                
+                cat.y = 150;
+                cat.velocity = 0;
+                cat.isJumping = false;
+                
+                scoreEl.textContent = '0';
+                playBtn.style.display = 'none';
+            }
+            
+            // Функция завершения игры
+            function endGame() {
+                gameRunning = false;
+                playBtn.textContent = 'Играть снова';
+                playBtn.style.display = 'block';
+                
+                if (score > highScore) {
+                    highScore = score;
+                    highScoreEl.textContent = highScore;
+                }
+            }
+            
+            // Основной игровой цикл
+            function gameLoop() {
+                if (!gameRunning) return;
+                
+                // Очистка canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Рисуем фон
+                ctx.fillStyle = '#cceeff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height * 0.75);
+                ctx.fillStyle = '#88cc88';
+                ctx.fillRect(0, canvas.height * 0.75, canvas.width, canvas.height * 0.25);
+                
+                // Обновление и отрисовка кота
+                cat.update();
+                cat.draw();
+                
+                // Генерация препятствий
+                if (frameCount % 100 === 0) {
+                    obstacles.push(new Obstacle());
+                }
+                
+                // Обновление и отрисовка препятствий
+                for (let i = obstacles.length - 1; i >= 0; i--) {
+                    obstacles[i].update();
+                    obstacles[i].draw();
+                    
+                    // Проверка столкновений
+                    if (obstacles[i].collidesWith(cat)) {
+                        endGame();
+                        return;
+                    }
+                    
+                    // Удаление вышедших за границы препятствий
+                    if (obstacles[i].isOffscreen()) {
+                        obstacles.splice(i, 1);
+                        score++;
+                        scoreEl.textContent = score;
+                        
+                        // Увеличиваем скорость каждые 5 очков
+                        if (score % 5 === 0) {
+                            gameSpeed += 0.5;
+                        }
+                    }
+                }
+                
+                frameCount++;
+                requestAnimationFrame(gameLoop);
+            }
+            
+            // Обработчики событий
+            playBtn.addEventListener('click', function() {
+                resetGame();
+                gameLoop();
+            });
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.code === 'Space' && gameRunning) {
+                    cat.jump();
+                    e.preventDefault();
+                }
+                
+                // Запуск игры пробелом, если она не запущена
+                if (e.code === 'Space' && !gameRunning) {
+                    resetGame();
+                    gameLoop();
+                }
+            });
+            
+            canvas.addEventListener('click', function() {
+                if (gameRunning) {
+                    cat.jump();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

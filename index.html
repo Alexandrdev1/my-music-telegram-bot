@@ -18,6 +18,7 @@
             border-radius: 10px;
             display: block;
             margin: 0 auto;
+            touch-action: manipulation; /* для мобильных */
         }
         .game-stats {
             margin-top: 10px;
@@ -86,12 +87,20 @@
 
         <!-- МИНИ-ИГРА -->
         <section class="game-container">
-            <h2>Мини-игра: Бесконечный Раннер</h2>
-            <canvas id="gameCanvas" width="600" height="200"></canvas>
+            <h2>Мини игра - Дикий кот</h2>
+            <div style="position: relative; display: inline-block;">
+                <canvas id="gameCanvas" width="600" height="200"></canvas>
+                <button id="playBtn" 
+                        style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+                               padding:15px 30px;font-size:20px;font-weight:bold;
+                               background:#ff6600;color:#fff;border:none;border-radius:10px;cursor:pointer;">
+                    ▶ Play
+                </button>
+            </div>
             <div class="game-stats">
                 Время: <span id="time">0</span> сек | Монетки: <span id="coins">0</span>
             </div>
-            <p>Нажми ПРОБЕЛ или кликни мышкой чтобы прыгнуть 🐱</p>
+            <p>Тапни по экрану, чтобы прыгнуть 🐱</p>
         </section>
 
         <footer>
@@ -148,6 +157,10 @@
         // ------------------ ИГРА ------------------
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
+        const playBtn = document.getElementById("playBtn");
+
+        let gameRunning = false;
+        let gameOver = false;
 
         let catImg = new Image();
         catImg.src = "cat.png";
@@ -156,21 +169,35 @@
         cactusImg.src = "cactus.png";
 
         let coinImg = new Image();
-        coinImg.src = "https://upload.wikimedia.org/wikipedia/commons/4/4e/Emoji_u1f4b0.svg"; // монетка
+        coinImg.src = "https://upload.wikimedia.org/wikipedia/commons/4/4e/Emoji_u1f4b0.svg";
 
-        let cat = { x: 50, y: 150, w: 64, h: 64, vy: 0, jumpPower: -12, gravity: 0.6, grounded: true };
-        let obstacles = [];
-        let coins = [];
-        let time = 0;
-        let coinCount = 0;
-        let gameSpeed = 4;
-        let lastObstacleTime = 0;
+        let cat;
+        let obstacles;
+        let coins;
+        let time;
+        let coinCount;
+        let gameSpeed;
+        let lastObstacleTime;
+
+        function resetGame() {
+            cat = { x: 50, y: 150, w: 64, h: 64, vy: 0, jumpPower: -12, gravity: 0.6, grounded: true };
+            obstacles = [];
+            coins = [];
+            time = 0;
+            coinCount = 0;
+            gameSpeed = 5;
+            lastObstacleTime = 0;
+            document.getElementById("time").textContent = 0;
+            document.getElementById("coins").textContent = 0;
+            gameRunning = true;
+            gameOver = false;
+            playBtn.style.display = "none";
+        }
 
         function spawnObstacle() {
             let now = Date.now();
-            if (now - lastObstacleTime > 2000 + Math.random() * 2000) {
+            if (now - lastObstacleTime > 2000 + Math.random() * 1500) {
                 obstacles.push({ x: canvas.width, y: 136, w: 64, h: 64 });
-                // шанс появления монетки
                 if (Math.random() > 0.5) {
                     coins.push({ x: canvas.width + 80, y: 100, w: 32, h: 32 });
                 }
@@ -179,7 +206,8 @@
         }
 
         function update() {
-            // физика кота
+            if (!gameRunning) return;
+
             cat.y += cat.vy;
             cat.vy += cat.gravity;
             if (cat.y >= 150) {
@@ -188,26 +216,21 @@
                 cat.grounded = true;
             }
 
-            // движение препятствий
-            for (let o of obstacles) {
-                o.x -= gameSpeed;
-            }
-            for (let c of coins) {
-                c.x -= gameSpeed;
-            }
+            for (let o of obstacles) o.x -= gameSpeed;
+            for (let c of coins) c.x -= gameSpeed;
 
-            // столкновения с кактусами
             for (let o of obstacles) {
                 if (cat.x < o.x + o.w &&
                     cat.x + cat.w > o.x &&
                     cat.y < o.y + o.h &&
                     cat.y + cat.h > o.y) {
-                    alert("Игра окончена! Твои монетки: " + coinCount + " | Время: " + time + " сек");
-                    document.location.reload();
+                    gameOver = true;
+                    gameRunning = false;
+                    playBtn.textContent = "Играть снова";
+                    playBtn.style.display = "block";
                 }
             }
 
-            // сбор монет
             for (let i = coins.length - 1; i >= 0; i--) {
                 let c = coins[i];
                 if (cat.x < c.x + c.w &&
@@ -220,7 +243,6 @@
                 }
             }
 
-            // удаление старых объектов
             obstacles = obstacles.filter(o => o.x + o.w > 0);
             coins = coins.filter(c => c.x + c.w > 0);
 
@@ -230,44 +252,42 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // кот
+            ctx.fillStyle = "#88cc88";
+            ctx.fillRect(0, 190, canvas.width, 10);
+
             ctx.drawImage(catImg, cat.x, cat.y, cat.w, cat.h);
 
-            // препятствия
-            for (let o of obstacles) {
-                ctx.drawImage(cactusImg, o.x, o.y, o.w, o.h);
-            }
-
-            // монетки
-            for (let c of coins) {
-                ctx.drawImage(coinImg, c.x, c.y, c.w, c.h);
-            }
+            for (let o of obstacles) ctx.drawImage(cactusImg, o.x, o.y, o.w, o.h);
+            for (let c of coins) ctx.drawImage(coinImg, c.x, c.y, c.w, c.h);
         }
 
         function loop() {
-            update();
-            draw();
+            if (gameRunning) {
+                update();
+                draw();
+            }
             requestAnimationFrame(loop);
         }
 
         function jump() {
-            if (cat.grounded) {
+            if (gameRunning && cat.grounded) {
                 cat.vy = cat.jumpPower;
                 cat.grounded = false;
             }
         }
 
-        document.addEventListener("keydown", e => {
-            if (e.code === "Space") {
-                jump();
-            }
-        });
+        canvas.addEventListener("touchstart", jump);
         canvas.addEventListener("click", jump);
 
-        // таймер
+        playBtn.addEventListener("click", () => {
+            resetGame();
+        });
+
         setInterval(() => {
-            time++;
-            document.getElementById("time").textContent = time;
+            if (gameRunning) {
+                time++;
+                document.getElementById("time").textContent = time;
+            }
         }, 1000);
 
         loop();

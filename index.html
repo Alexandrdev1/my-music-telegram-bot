@@ -7,404 +7,216 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* --- Стили для игры --- */
-        .game-container {
-          margin: 10px auto;
-          max-width: 100%;
-          position: relative;
-        }
-        canvas {
-          background: #cceeff;
-          border: 2px solid #333;
-          border-radius: 10px;
-          display: block;
-          margin: 0 auto;
-          touch-action: manipulation;
-          max-width: 100%;
-        }
-        #playBtn {
-          position: absolute;
-          top: 50%;left: 50%;
-          transform: translate(-50%,-50%);
-          padding:15px 30px;
-          font-size:20px;
-          font-weight:bold;
-          background:#ff6600;
-          color:#fff;
-          border:none;
-          border-radius:10px;
-          cursor:pointer;
-          z-index: 10;
-          transition: all 0.3s ease;
-        }
-        #playBtn:hover {
-          background:#ff8800;
-          transform: translate(-50%,-50%) scale(1.05);
-        }
-        .game-stats {
-          margin-top: 5px;
-          font-size: 18px;
-          font-weight: bold;
-          text-align: center;
-        }
-        
-        /* Оптимизация анимации */
-        .game {
-          will-change: transform, opacity;
-        }
+        body {margin:0; font-family:sans-serif; background:#f4f4f4; text-align:center; overflow-x:hidden;}
+        .game-container {position:relative; max-width:100%; margin:16px auto; overflow:hidden;}
+        canvas {display:block; margin:0 auto; border-radius:10px; max-width:100%;}
+        #playBtn {position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+            padding:14px 28px; font-size:18px; font-weight:bold; background:#ff6600; color:#fff; border:none; border-radius:10px; cursor:pointer; z-index:10;}
+        .game-stats {margin-top:8px; font-size:18px; font-weight:bold;}
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/refs/heads/main/Обложка.jpg" alt="Абрамов Александр" class="profile-img" id="profileImage">
-            <h1>Абрамов Александр</h1>
-            <p class="tagline">Музыкант</p>
-        </header>
+<div class="container">
+    <header>
+        <img src="https://raw.githubusercontent.com/alexandrdev1/my-music-telegram-bot/refs/heads/main/Обложка.jpg" alt="Абрамов Александр" class="profile-img" id="profileImage">
+        <h1>Абрамов Александр</h1>
+        <p class="tagline">Музыкант</p>
+    </header>
 
-        <section class="about">
-            <h2>Обо мне</h2>
-            <p>Гитарист. Один из основателей группы НЕ ОН.</p>
-        </section>
+    <section class="about">
+        <h2>Обо мне</h2>
+        <p>Гитарист. Один из основателей группы НЕ ОН.</p>
+    </section>
 
-        <section class="music">
-            <h2>Проекты</h2>
-            <div class="project-grid">
-                <a href="neon.html" class="project-card neon-card">
-                    <div class="project-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <span>НЕ ОН</span>
-                </a>
-                <a href="#solo" class="project-card solo-card" id="soloBtn">
-                    <div class="project-icon">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <span>so so</span>
-                </a>
+    <section class="music">
+        <h2>Проекты</h2>
+        <div class="project-grid">
+            <a href="neon.html" class="project-card neon-card">
+                <div class="project-icon"><i class="fas fa-users"></i></div>
+                <span>НЕ ОН</span>
+            </a>
+            <a href="#solo" class="project-card solo-card" id="soloBtn">
+                <div class="project-icon"><i class="fas fa-user"></i></div>
+                <span>so so</span>
+            </a>
+        </div>
+        <div id="solo" class="solo-project">
+            <h3>so so</h3>
+            <p>Сольный проект</p>
+            <div class="solo-links">
+                <a href="https://t.me/sssssssooo1" class="link-btn"><i class="fab fa-telegram"></i> Telegram</a>
+                <a href="https://music.yandex.ru/artist/24305033" class="link-btn"><i class="fab fa-yandex"></i> Яндекс.Музыка</a>
             </div>
-            
-            <!-- Сольный проект - СКРЫТ ПО УМОЛЧАНИЮ -->
-            <div id="solo" class="solo-project">
-                <h3>so so</h3>
-                <p>Сольный проект</p>
-                <div class="solo-links">
-                    <a href="https://t.me/sssssssooo1" class="link-btn"><i class="fab fa-telegram"></i> Telegram</a>
-                    <a href="https://music.yandex.ru/artist/24305033" class="link-btn"><i class="fab fa-yandex"></i> Яндекс.Музыка</a>
-                </div>
-            </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="services">
-            <h2>Услуги</h2>
-            <ul>
-                <li>Написание музыки — <strong>5000 ₽</strong></li>
-                <li>Уроки по гитаре (60 мин) — <strong>1000 ₽</strong></li>
-                <li>? — <strong>2000 ₽</strong></li>
-            </ul>
-            <p>Заказать услугу: <a href="https://t.me/Alexandrdev1">@Alexandrdev1</a></p>
-        </section>
+    <section class="services">
+        <h2>Услуги</h2>
+        <ul>
+            <li>Написание музыки — <strong>5000 ₽</strong></li>
+            <li>Уроки по гитаре (60 мин) — <strong>1000 ₽</strong></li>
+            <li>? — <strong>2000 ₽</strong></li>
+        </ul>
+        <p>Заказать услугу: <a href="https://t.me/Alexandrdev1">@Alexandrdev1</a></p>
+    </section>
 
-        <section class="donate">
-            <h2>Поддержать творчество</h2>
-            <p>Если вам нравится моя музыка, вы можете поддержать меня донатом. Каждая копейка пойдет на создание новой музыки и развитие проекта. Спасибо!</p>
-            <a href="https://tips.yandex.ru/guest/payment/3400836" class="link-btn" style="margin-top: 15px;"><i class="fas fa-hand-holding-heart"></i> Поддержать на Яндекс.Деньги</a>
-        </section>
+    <section class="donate">
+        <h2>Поддержать творчество</h2>
+        <p>Если вам нравится моя музыка, вы можете поддержать меня донатом. Каждая копейка пойдет на создание новой музыки и развитие проекта. Спасибо!</p>
+        <a href="https://tips.yandex.ru/guest/payment/3400836" class="link-btn" style="margin-top:15px;"><i class="fas fa-hand-holding-heart"></i> Поддержать на Яндекс.Деньги</a>
+    </section>
 
-        <!-- === МИНИ ИГРА === -->
-        <section class="game">
-          <h2>Мини игра - Дикий кот</h2>
-          <div class="game-container">
-            <canvas id="gameCanvas" height="200"></canvas>
+    <!-- === МИНИ ИГРА === -->
+    <section class="game">
+        <h2>Мини игра - Дикий кот</h2>
+        <div class="game-container" id="gameContainer">
+            <canvas id="gameCanvas"></canvas>
             <button id="playBtn">▶ Play</button>
-          </div>
-          <div class="game-stats">
+        </div>
+        <div class="game-stats">
             Время: <span id="time">0</span> сек | Монетки: <span id="coins">0</span>
-          </div>
-          <p style="text-align:center">Тапни по экрану, чтобы прыгнуть 🐱</p>
-        </section>
+        </div>
+        <p style="text-align:center">Тапни по экрану, чтобы прыгнуть 🐱</p>
+    </section>
 
-        <footer>
-            <p>Свяжитесь со мной: <a href="https://t.me/Alexandrdev1">Telegram</a> | <a href="mailto:abramov.aleksandr.99@icloud.com">Email</a></p>
-        </footer>
-    </div>
+    <footer>
+        <p>Свяжитесь со мной: <a href="https://t.me/Alexandrdev1">Telegram</a> | <a href="mailto:abramov.aleksandr.99@icloud.com">Email</a></p>
+    </footer>
+</div>
 
-    <!-- Модальное окно для фото -->
-    <div id="imageModal" class="modal">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="modalImage">
-    </div>
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+const playBtn = document.getElementById("playBtn");
+const timeEl = document.getElementById("time");
+const coinsEl = document.getElementById("coins");
 
-    <script>
-        // Показ/скрытие информации о сольном проекте
-        document.getElementById('soloBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            const soloSection = document.getElementById('solo');
-            const isHidden = soloSection.style.display !== 'block';
-            
-            soloSection.style.display = isHidden ? 'block' : 'none';
-            
-            if (isHidden) {
-                setTimeout(() => {
-                    soloSection.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-            }
-        });
+let scale = 1, gameRunning = false;
+let cat = new Image(), cactus = new Image();
+cat.src = 'cat.png';
+cactus.src = 'cactus.png';
 
-        // Модальное окно для фото
-        const modal = document.getElementById("imageModal");
-        const img = document.getElementById("profileImage");
-        const modalImg = document.getElementById("modalImage");
-        const span = document.getElementsByClassName("close")[0];
+let cw, ch, catObj, obstacles = [], coins = [], speed, frame, timer, coinCount;
 
-        img.onclick = function() {
-            modal.style.display = "block";
-            modalImg.src = this.src;
-            document.body.style.overflow = "hidden";
+function resize() {
+    cw = Math.min(window.innerWidth - 16, 600);
+    ch = Math.floor(cw / 3);
+    scale = cw / 600;
+    canvas.width = cw;
+    canvas.height = ch;
+}
+window.addEventListener('resize', resize);
+resize();
+
+function resetGame() {
+    catObj = {x:50*scale, y:ch-64*scale-10*scale, w:64*scale, h:64*scale, vy:0, gravity:0.7*scale, jump:-12*scale, grounded:true};
+    obstacles = [];
+    coins = [];
+    speed = 6*scale;
+    frame = 0;
+    timer=0;
+    coinCount=0;
+    timeEl.textContent = '0';
+    coinsEl.textContent = '0';
+    gameRunning=true;
+    playBtn.style.display='none';
+}
+
+function spawnObstacle() {
+    let last = obstacles.length>0? obstacles[obstacles.length-1].x : cw;
+    let gap = 150*scale + Math.random()*150*scale;
+    obstacles.push({x:last+gap, y:ch-64*scale-10*scale, w:64*scale, h:64*scale});
+}
+
+function spawnCoin() {
+    let last = coins.length>0? coins[coins.length-1].x : cw;
+    let gap = 100*scale + Math.random()*150*scale;
+    let height = ch-100*scale - Math.random()*50*scale;
+    coins.push({x:last+gap, y:height, r:14*scale});
+}
+
+function update() {
+    if(!gameRunning) return;
+
+    // прыжок и гравитация
+    catObj.vy += catObj.gravity;
+    catObj.y += catObj.vy;
+    if(catObj.y >= ch-64*scale-10*scale){catObj.y=ch-64*scale-10*scale; catObj.vy=0; catObj.grounded=true;} 
+    else catObj.grounded=false;
+
+    // движение препятствий и монет
+    obstacles.forEach(o=>o.x-=speed);
+    coins.forEach(c=>c.x-=speed);
+
+    // столкновение с препятствиями
+    for(let o of obstacles){
+        if(catObj.x < o.x+o.w && catObj.x+catObj.w>o.x && catObj.y<o.y+o.h && catObj.y+catObj.h>o.y){
+            gameRunning=false; playBtn.style.display='block'; playBtn.textContent='Играть снова';
         }
+    }
 
-        span.onclick = function() {
-            modal.style.display = "none";
-            document.body.style.overflow = "auto";
+    // сбор монет
+    for(let i=coins.length-1;i>=0;i--){
+        let c=coins[i];
+        if(catObj.x< c.x+c.r && catObj.x+catObj.w>c.x-c.r && catObj.y< c.y+c.r && catObj.y+catObj.h>c.y-c.r){
+            coinCount++; coins.splice(i,1); coinsEl.textContent=coinCount;
         }
+    }
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-                document.body.style.overflow = "auto";
-            }
-        }
+    // удаление вышедших за экран
+    obstacles = obstacles.filter(o=>o.x+o.w>0);
+    coins = coins.filter(c=>c.x+c.r>0);
 
-        /* ================== ОПТИМИЗИРОВАННАЯ ИГРА ================== */
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
-        const playBtn = document.getElementById("playBtn");
+    // спавн
+    if(frame%90==0) spawnObstacle();
+    if(frame%60==0) spawnCoin();
 
-        // Оптимизация: предзагрузка изображений
-        const images = {
-            cat: new Image(),
-            cactus: new Image(),
-            coin: new Image()
-        };
+    frame++;
+}
 
-        // Загрузка изображений
-        images.cat.src = "https://i.ibb.co/xDZwXHY/cat.png";
-        images.cactus.src = "https://i.ibb.co/6JRbhzx/cactus.png";
-        images.coin.src = "https://upload.wikimedia.org/wikipedia/commons/4/4e/Emoji_u1f4b0.svg";
+function draw() {
+    // фон
+    ctx.fillStyle='#cceeff';
+    ctx.fillRect(0,0,cw,ch*0.75);
+    ctx.fillStyle='#88cc88';
+    ctx.fillRect(0,ch*0.75,cw,ch*0.25);
 
-        // Ожидание загрузки всех изображений
-        let imagesLoaded = 0;
-        const totalImages = Object.keys(images).length;
+    // кот
+    ctx.drawImage(cat, catObj.x, catObj.y, catObj.w, catObj.h);
 
-        function imageLoaded() {
-            imagesLoaded++;
-            if (imagesLoaded === totalImages) {
-                playBtn.disabled = false;
-                playBtn.textContent = "▶ Play";
-            }
-        }
+    // препятствия
+    obstacles.forEach(o=>ctx.drawImage(cactus,o.x,o.y,o.w,o.h));
 
-        // Добавляем обработчики загрузки для каждого изображения
-        for (let key in images) {
-            images[key].onload = imageLoaded;
-            images[key].onerror = function() {
-                console.error("Ошибка загрузки изображения: " + key);
-                imageLoaded();
-            };
-        }
+    // монетки
+    coins.forEach(c=>{
+        ctx.beginPath();
+        ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
+        ctx.fillStyle='#FFD700';
+        ctx.fill();
+        ctx.strokeStyle='#DAA520';
+        ctx.stroke();
+    });
+}
 
-        // Настройка размера canvas
-        function resizeCanvas() {
-            canvas.width = Math.min(window.innerWidth - 20, 600);
-        }
-        window.addEventListener("resize", resizeCanvas);
-        resizeCanvas();
+function loop(){
+    update();
+    draw();
+    requestAnimationFrame(loop);
+}
 
-        // Игровые переменные
-        let gameRunning = false;
-        let cat, obstacles, coins, time, coinCount, gameSpeed, frame;
-        let lastTime = 0;
-        const FPS = 60;
-        const frameInterval = 1000 / FPS;
+function jump(){
+    if(gameRunning && catObj.grounded){catObj.vy=catObj.jump;}
+}
 
-        // Сброс игры
-        function resetGame() {
-            cat = { 
-                x: 50, 
-                y: 150, 
-                w: 40, 
-                h: 40, 
-                vy: 0, 
-                jumpPower: -10, 
-                gravity: 0.5, 
-                grounded: true 
-            };
-            obstacles = [];
-            coins = [];
-            time = 0;
-            coinCount = 0;
-            gameSpeed = 4;
-            frame = 0;
-            document.getElementById("time").textContent = "0";
-            document.getElementById("coins").textContent = "0";
-            gameRunning = true;
-            playBtn.style.display = "none";
-        }
+canvas.addEventListener('click',jump);
+canvas.addEventListener('touchstart',jump);
 
-        // Создание объектов
-        function spawnObjects() {
-            if (frame % 120 === 0) {
-                obstacles.push({ x: canvas.width, y: 160, w: 30, h: 40 });
-                
-                if (Math.random() > 0.5) {
-                    coins.push({ 
-                        x: canvas.width + 40, 
-                        y: 100 + Math.random() * 40, 
-                        w: 20, 
-                        h: 20,
-                        collected: false
-                    });
-                }
-            }
-        }
+playBtn.addEventListener('click',()=>{resetGame();});
 
-        // Обновление игрового состояния
-        function update(currentTime) {
-            if (!gameRunning) return;
-            
-            // Расчет дельты времени для плавной анимации
-            const deltaTime = currentTime - lastTime;
-            
-            if (deltaTime > frameInterval) {
-                lastTime = currentTime - (deltaTime % frameInterval);
-                
-                // Обновление позиции кота
-                cat.y += cat.vy;
-                cat.vy += cat.gravity;
-                
-                // Проверка земли
-                if (cat.y >= 150) { 
-                    cat.y = 150; 
-                    cat.vy = 0; 
-                    cat.grounded = true; 
-                }
-                
-                // Движение препятствий и монет
-                for (let o of obstacles) o.x -= gameSpeed;
-                for (let c of coins) c.x -= gameSpeed;
-                
-                // Проверка столкновений с препятствиями
-                for (let o of obstacles) {
-                    if (cat.x < o.x + o.w && 
-                        cat.x + cat.w > o.x && 
-                        cat.y < o.y + o.h && 
-                        cat.y + cat.h > o.y) {
-                        endGame();
-                        return;
-                    }
-                }
-                
-                // Проверка сбора монет
-                for (let i = coins.length - 1; i >= 0; i--) {
-                    let c = coins[i];
-                    if (!c.collected && 
-                        cat.x < c.x + c.w && 
-                        cat.x + cat.w > c.x && 
-                        cat.y < c.y + c.h && 
-                        cat.y + cat.h > c.y) {
-                        coinCount++;
-                        coins[i].collected = true;
-                        coins.splice(i, 1);
-                        document.getElementById("coins").textContent = coinCount;
-                    }
-                }
-                
-                // Удаление объектов за пределами экрана
-                obstacles = obstacles.filter(o => o.x + o.w > 0);
-                coins = coins.filter(c => c.x + c.w > 0 && !c.collected);
-                
-                frame++;
-                spawnObjects();
-            }
-        }
+setInterval(()=>{if(gameRunning){timer++; timeEl.textContent=timer;}},1000);
 
-        // Отрисовка игры
-        function draw() {
-            if (!gameRunning) return;
-            
-            // Очистка canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Рисование фона
-            ctx.fillStyle = "#88cc88"; 
-            ctx.fillRect(0, 190, canvas.width, 10); 
-            
-            // Рисование кота
-            if (images.cat.complete) {
-                ctx.drawImage(images.cat, cat.x, cat.y, cat.w, cat.h);
-            }
-            
-            // Рисование препятствий
-            if (images.cactus.complete) {
-                for (let o of obstacles) {
-                    ctx.drawImage(images.cactus, o.x, o.y, o.w, o.h);
-                }
-            }
-            
-            // Рисование монет
-            if (images.coin.complete) {
-                for (let c of coins) {
-                    ctx.drawImage(images.coin, c.x, c.y, c.w, c.h);
-                }
-            }
-        }
-
-        // Игровой цикл
-        function gameLoop(currentTime) {
-            update(currentTime);
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
-
-        // Завершение игры
-        function endGame() {
-            gameRunning = false;
-            playBtn.textContent = "Играть снова";
-            playBtn.style.display = "block";
-        }
-
-        // Прыжок
-        function jump() {
-            if (gameRunning && cat.grounded) {
-                cat.vy = cat.jumpPower;
-                cat.grounded = false;
-            }
-        }
-
-        // Обработчики событий
-        canvas.addEventListener("touchstart", function(e) {
-            e.preventDefault();
-            jump();
-        });
-        
-        canvas.addEventListener("mousedown", jump);
-        
-        playBtn.addEventListener("click", function() {
-            resetGame();
-            lastTime = performance.now();
-        });
-
-        // Таймер
-        setInterval(() => { 
-            if (gameRunning) { 
-                time++; 
-                document.getElementById("time").textContent = time; 
-            } 
-        }, 1000);
-
-        // Запуск игрового цикла
-        requestAnimationFrame(gameLoop);
-    </script>
+loop();
+</script>
 </body>
 </html>

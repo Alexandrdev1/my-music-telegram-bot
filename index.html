@@ -2,10 +2,166 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Абрамов Александр - Музыкант</title>
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Подключаем правильный Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p0V+rY8C1xFzM9Ck5mYJ6i3YQy6M3nNf4QJXyZ1+0FmqBiPbP0KqkVZ4HqXwMEYc6KT9Mdl+9gP6XdJ5r1LQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<style>
+/* Базовая адаптация */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.container {
+  padding: 10px;
+  max-width: 900px;
+  margin: auto;
+}
+
+header {
+  text-align: center;
+}
+
+.profile-img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+h1 {
+  font-size: 1.8em;
+}
+
+h2 {
+  font-size: 1.4em;
+  margin-top: 20px;
+}
+
+button, .link-btn {
+  background: #333;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+button:hover, .link-btn:hover {
+  background: #555;
+}
+
+.link-btn {
+  display: inline-block;
+  text-decoration: none;
+  margin: 5px 0;
+}
+
+/* Галерея */
+.carousel {
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.carousel-container {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.carousel-prev, .carousel-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.carousel-prev { left: 5px; }
+.carousel-next { right: 5px; }
+
+/* Игра */
+.game-container {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+#gameCanvas {
+  width: 100%;
+  height: auto;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  display: block;
+  margin: auto;
+}
+
+.game-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+/* Модальное окно */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  padding-top: 60px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+  display: block;
+  max-width: 90%;
+  max-height: 80%;
+  margin: auto;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: white;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+  .profile-img {
+    width: 120px;
+    height: 120px;
+  }
+  h1 { font-size: 1.4em; }
+  h2 { font-size: 1.2em; }
+  button, .link-btn {
+    width: 100%;
+    margin: 5px 0;
+    font-size: 0.95em;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -120,123 +276,118 @@ let score = 0;
 let gameTime = 0;
 let gameTimer;
 
-        // Загружаем картинки
-        const dinoImg = new Image();
-        dinoImg.src = "cat.png"; // персонаж
+// Загружаем картинки
+const dinoImg = new Image();
+dinoImg.src = "cat.png"; // персонаж
 
-        const obstacleImg = new Image();
-        obstacleImg.src = "cactus.png"; // препятствие
+const obstacleImg = new Image();
+obstacleImg.src = "cactus.png"; // препятствие
 
 let dino = { x: 50, y: 150, width: 30, height: 30, jumping: false, velocity: 0 };
 let obstacles = [];
 let coins = [];
+let lastObstacleTime = 0;
 
 function startGame() {
-gameRunning = true;
-score = 0;
-gameTime = 0;
-obstacles = [];
-coins = [];
-dino.y = 150;
-dino.jumping = false;
-scoreElement.textContent = score;
-timeElement.textContent = gameTime;
+  gameRunning = true;
+  score = 0;
+  gameTime = 0;
+  obstacles = [];
+  coins = [];
+  dino.y = 150;
+  dino.jumping = false;
+  scoreElement.textContent = score;
+  timeElement.textContent = gameTime;
 
-clearInterval(gameTimer);
-gameTimer = setInterval(() => {
-if (gameRunning) {
-gameTime++;
-timeElement.textContent = gameTime;
-}
-}, 1000);
+  clearInterval(gameTimer);
+  gameTimer = setInterval(() => {
+    if (gameRunning) {
+      gameTime++;
+      timeElement.textContent = gameTime;
+    }
+  }, 1000);
 
-gameLoop();
+  requestAnimationFrame(gameLoop);
 }
 
 function drawDino() {
-            ctx.fillStyle = '#ff6b6b';
-            ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
-            ctx.drawImage(dinoImg, dino.x, dino.y - (64 - dino.height), 64, 64);
+  ctx.drawImage(dinoImg, dino.x, dino.y - (64 - dino.height), 64, 64);
 }
 
 function updateDino() {
-if (dino.jumping) {
-dino.y += dino.velocity;
-dino.velocity += 0.5;
-if (dino.y >= 150) {
-dino.y = 150;
-dino.jumping = false;
-}
-}
+  if (dino.jumping) {
+    dino.y += dino.velocity;
+    dino.velocity += 0.5;
+    if (dino.y >= 150) {
+      dino.y = 150;
+      dino.jumping = false;
+    }
+  }
 }
 
 function jump() {
-if (!dino.jumping) {
-dino.jumping = true;
-dino.velocity = -12;
-}
-}
-
-function gameLoop() {
-if (!gameRunning) return;
-ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-updateDino();
-drawDino();
-
-// препятствия
-if (Math.random() < 0.02) {
-obstacles.push({ x: canvas.width, y: 150, width: 20, height: 30 });
-}
-// монетки
-if (Math.random() < 0.01) {
-coins.push({ x: canvas.width, y: 100, width: 15, height: 15, collected: false });
+  if (!dino.jumping) {
+    dino.jumping = true;
+    dino.velocity = -12;
+  }
 }
 
-// обработка препятствий
-for (let i = 0; i < obstacles.length; i++) {
-obstacles[i].x -= 5;
-                ctx.fillStyle = '#86868b';
-                ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].width, obstacles[i].height);
-                ctx.drawImage(obstacleImg, obstacles[i].x, obstacles[i].y - (64 - obstacles[i].height), 64, 64);
-if (checkCollision(dino, obstacles[i])) {
-gameRunning = false;
-clearInterval(gameTimer);
-alert(`Игра окончена! Ваш счёт: ${score}. Время: ${gameTime} сек`);
-return;
-}
-                if (obstacles[i].x < -20) { obstacles.splice(i, 1); i--; }
-                if (obstacles[i].x < -64) {
-                    obstacles.splice(i, 1);
-                    i--;
-                }
-}
+function gameLoop(timestamp) {
+  if (!gameRunning) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-// обработка монеток
-for (let i = 0; i < coins.length; i++) {
-if (!coins[i].collected) {
-coins[i].x -= 5;
-ctx.fillStyle = '#ffd700';
-ctx.beginPath();
-ctx.arc(coins[i].x + coins[i].width/2, coins[i].y + coins[i].height/2, coins[i].width/2, 0, Math.PI*2);
-ctx.fill();
-if (checkCollision(dino, coins[i])) {
-coins[i].collected = true;
-score += 10;
-scoreElement.textContent = score;
-}
-}
-if (coins[i].x < -20) { coins.splice(i, 1); i--; }
-}
+  updateDino();
+  drawDino();
 
-requestAnimationFrame(gameLoop);
+  // препятствия — проверка времени, чтобы не слишком часто
+  if (timestamp - lastObstacleTime > 1500 && Math.random() < 0.02) {
+    obstacles.push({ x: canvas.width, y: 150, width: 20, height: 30 });
+    lastObstacleTime = timestamp;
+  }
+
+  // монетки
+  if (Math.random() < 0.01) {
+    coins.push({ x: canvas.width, y: 100, width: 15, height: 15, collected: false });
+  }
+
+  // обработка препятствий
+  for (let i = 0; i < obstacles.length; i++) {
+    obstacles[i].x -= 5;
+    ctx.drawImage(obstacleImg, obstacles[i].x, obstacles[i].y - (64 - obstacles[i].height), 64, 64);
+    if (checkCollision(dino, obstacles[i])) {
+      gameRunning = false;
+      clearInterval(gameTimer);
+      alert(`Игра окончена! Ваш счёт: ${score}. Время: ${gameTime} сек`);
+      return;
+    }
+    if (obstacles[i].x < -64) { obstacles.splice(i, 1); i--; }
+  }
+
+  // обработка монеток
+  for (let i = 0; i < coins.length; i++) {
+    if (!coins[i].collected) {
+      coins[i].x -= 5;
+      ctx.fillStyle = '#ffd700';
+      ctx.beginPath();
+      ctx.arc(coins[i].x + coins[i].width/2, coins[i].y + coins[i].height/2, coins[i].width/2, 0, Math.PI*2);
+      ctx.fill();
+      if (checkCollision(dino, coins[i])) {
+        coins[i].collected = true;
+        score += 10;
+        scoreElement.textContent = score;
+      }
+    }
+    if (coins[i].x < -20) { coins.splice(i, 1); i--; }
+  }
+
+  requestAnimationFrame(gameLoop);
 }
 
 function checkCollision(a, b) {
-return a.x < b.x + b.width &&
-a.x + a.width > b.x &&
-a.y < b.y + b.height &&
-a.y + a.height > b.y;
+  return a.x < b.x + b.width &&
+         a.x + a.width > b.x &&
+         a.y < b.y + b.height &&
+         a.y + a.height > b.y;
 }
 
 startBtn.addEventListener('click', startGame);

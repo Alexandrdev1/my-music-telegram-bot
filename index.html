@@ -21,6 +21,7 @@
             position: relative;
             margin: 0 auto;
             max-width: 600px;
+            overflow: hidden;
         }
         
         #gameCanvas {
@@ -30,6 +31,7 @@
             margin: 0 auto;
             display: block;
             max-width: 100%;
+            touch-action: manipulation;
         }
         
         #playBtn {
@@ -46,6 +48,11 @@
             border-radius: 8px;
             cursor: pointer;
             z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        #playBtn:hover {
+            background: #ff8800;
         }
         
         .game-stats {
@@ -55,6 +62,7 @@
             display: flex;
             justify-content: center;
             gap: 20px;
+            flex-wrap: wrap;
         }
         
         .game-instruction {
@@ -66,6 +74,19 @@
             display: flex;
             align-items: center;
             gap: 5px;
+        }
+        
+        /* Адаптивность для мобильных */
+        @media (max-width: 600px) {
+            .game-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            #playBtn {
+                padding: 10px 20px;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -193,7 +214,7 @@
             }
         }
 
-        // ========== КОД ИГРЫ ==========
+        // ========== ПЕРЕПИСАННЫЙ КОД ИГРЫ ==========
         document.addEventListener('DOMContentLoaded', function() {
             const canvas = document.getElementById('gameCanvas');
             const ctx = canvas.getContext('2d');
@@ -201,16 +222,6 @@
             const scoreEl = document.getElementById('score');
             const coinsEl = document.getElementById('coins');
             const highScoreEl = document.getElementById('highScore');
-            
-            // Загрузка изображений
-            const catImg = new Image();
-            const cactusImg = new Image();
-            const coinImg = new Image();
-            
-            // Правильные пути к изображениям
-            catImg.src = 'https://i.ibb.co/xDZwXHY/cat.png';
-            cactusImg.src = 'https://i.ibb.co/6JRbhzx/cactus.png';
-            coinImg.src = 'https://i.ibb.co/5sUHJ7S/coin.png'; // Замените на свою монетку
             
             // Настройка размеров canvas
             function resizeCanvas() {
@@ -223,20 +234,34 @@
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
             
-            // Игровые переменные
+            // Создаем объекты изображений
+            const images = {
+                cat: new Image(),
+                cactus: new Image(),
+                coin: new Image()
+            };
+            
+            // Назначаем источники изображений
+            images.cat.src = 'https://i.ibb.co/xDZwXHY/cat.png';
+            images.cactus.src = 'https://i.ibb.co/6JRbhzx/cactus.png';
+            images.coin.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzAiIGZpbGw9IiNGRkQ3MDAiLz48Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIyNCIgZmlsbD0iI0ZGRkZGRiIvPjxjaXJjbGUgY3g9IjMyIiBjeT0iMzIiIHI9IjE4IiBmaWxsPSIjRkZENzAwIi8+PC9zdmc+';
+            
+            // Переменные игры
             let gameRunning = false;
             let score = 0;
             let coinsCount = 0;
             let highScore = 0;
             let gameSpeed = 5;
             let frameCount = 0;
+            let lastObstacleTime = 0;
+            let lastCoinTime = 0;
             
             // Объект кота
             const cat = {
                 x: 50,
                 y: 150,
-                width: 64,
-                height: 64,
+                width: 40,
+                height: 40,
                 velocity: 0,
                 gravity: 0.8,
                 jumpStrength: -15,
@@ -262,10 +287,10 @@
                 },
                 
                 draw: function() {
-                    if (catImg.complete) {
-                        ctx.drawImage(catImg, this.x, this.y, this.width, this.height);
+                    if (images.cat.complete) {
+                        ctx.drawImage(images.cat, this.x, this.y, this.width, this.height);
                     } else {
-                        // Запасной вариант, если изображение не загрузилось
+                        // Запасной вариант
                         ctx.fillStyle = '#ff6b6b';
                         ctx.fillRect(this.x, this.y, this.width, this.height);
                     }
@@ -279,8 +304,8 @@
             // Класс препятствия
             class Obstacle {
                 constructor() {
-                    this.width = 64;
-                    this.height = 64;
+                    this.width = 30;
+                    this.height = 50;
                     this.x = canvas.width;
                     this.y = 150;
                     this.speed = gameSpeed;
@@ -291,8 +316,8 @@
                 }
                 
                 draw() {
-                    if (cactusImg.complete) {
-                        ctx.drawImage(cactusImg, this.x, this.y - this.height + 10, this.width, this.height);
+                    if (images.cactus.complete) {
+                        ctx.drawImage(images.cactus, this.x, this.y - this.height + 10, this.width, this.height);
                     } else {
                         // Запасной вариант
                         ctx.fillStyle = '#2ecc71';
@@ -315,10 +340,10 @@
             // Класс монетки
             class Coin {
                 constructor() {
-                    this.width = 32;
-                    this.height = 32;
+                    this.width = 20;
+                    this.height = 20;
                     this.x = canvas.width;
-                    this.y = 80 + Math.random() * 70;
+                    this.y = 100 + Math.random() * 50;
                     this.speed = gameSpeed;
                     this.collected = false;
                 }
@@ -329,8 +354,8 @@
                 
                 draw() {
                     if (!this.collected) {
-                        if (coinImg.complete) {
-                            ctx.drawImage(coinImg, this.x, this.y, this.width, this.height);
+                        if (images.coin.complete) {
+                            ctx.drawImage(images.coin, this.x, this.y, this.width, this.height);
                         } else {
                             // Запасной вариант
                             ctx.fillStyle = '#FFD700';
@@ -363,6 +388,8 @@
                 coinsCount = 0;
                 gameSpeed = 5;
                 frameCount = 0;
+                lastObstacleTime = 0;
+                lastCoinTime = 0;
                 obstacles = [];
                 coins = [];
                 
@@ -394,7 +421,7 @@
                 // Очистка canvas
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
-                // Рисуем фон (темный)
+                // Рисуем фон
                 ctx.fillStyle = '#2c3e50';
                 ctx.fillRect(0, 0, canvas.width, canvas.height * 0.75);
                 ctx.fillStyle = '#34495e';
@@ -404,14 +431,16 @@
                 cat.update();
                 cat.draw();
                 
-                // Генерация препятствий
-                if (frameCount % 100 === 0) {
+                // Генерация препятствий (не чаще чем каждые 90 кадров)
+                if (frameCount - lastObstacleTime > 90 && Math.random() < 0.02) {
                     obstacles.push(new Obstacle());
+                    lastObstacleTime = frameCount;
                 }
                 
-                // Генерация монеток
-                if (frameCount % 120 === 0 && Math.random() > 0.5) {
+                // Генерация монеток (не чаще чем каждые 120 кадров)
+                if (frameCount - lastCoinTime > 120 && Math.random() < 0.015) {
                     coins.push(new Coin());
+                    lastCoinTime = frameCount;
                 }
                 
                 // Обновление и отрисовка препятствий
@@ -496,6 +525,26 @@
                     e.preventDefault();
                 }
             });
+            
+            // Предзагрузка изображений
+            let imagesLoaded = 0;
+            const totalImages = Object.keys(images).length;
+            
+            function imageLoaded() {
+                imagesLoaded++;
+                if (imagesLoaded === totalImages) {
+                    console.log('Все изображения загружены');
+                }
+            }
+            
+            // Добавляем обработчики загрузки для каждого изображения
+            for (let key in images) {
+                images[key].onload = imageLoaded;
+                images[key].onerror = function() {
+                    console.log("Изображение не загрузилось: " + key);
+                    imageLoaded();
+                };
+            }
         });
     </script>
 </body>

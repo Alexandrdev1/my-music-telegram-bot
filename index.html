@@ -27,7 +27,6 @@
         #gameCanvas {
             border: 2px solid #555;
             border-radius: 8px;
-            background: #1a1a1a;
             margin: 0 auto;
             display: block;
             max-width: 100%;
@@ -214,7 +213,7 @@
             }
         }
 
-        // ========== ПЕРЕПИСАННЫЙ КОД ИГРЫ ==========
+        // ========== КОД ИГРЫ ==========
         document.addEventListener('DOMContentLoaded', function() {
             const canvas = document.getElementById('gameCanvas');
             const ctx = canvas.getContext('2d');
@@ -234,17 +233,18 @@
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
             
-            // Создаем объекты изображений
+            // Создаем объекты изображений с правильными путями
             const images = {
                 cat: new Image(),
                 cactus: new Image(),
                 coin: new Image()
             };
             
-            // Назначаем источники изображений
+            // Назначаем источники изображений (замените на свои правильные пути)
+            // Убедитесь, что эти пути ведут к реальным файлам на вашем сервере
             images.cat.src = 'https://raw.githubusercontent.com/Alexandrdev1/my-music-telegram-bot/refs/heads/main/cat.png';
             images.cactus.src = 'https://raw.githubusercontent.com/Alexandrdev1/my-music-telegram-bot/refs/heads/main/cactus.png';
-            images.coin.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMzAiIGZpbGw9IiNGRkQ3MDAiLz48Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIyNCIgZmlsbD0iI0ZGRkZGRiIvPjxjaXJjbGUgY3g9IjMyIiBjeT0iMzIiIHI9IjE4IiBmaWxsPSIjRkZENzAwIi8+PC9zdmc+';
+            images.coin.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTQiIGZpbGw9IiNGRkQ3MDAiIHN0cm9rZT0iI0RBQTUyMCIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+';
             
             // Переменные игры
             let gameRunning = false;
@@ -260,8 +260,8 @@
             const cat = {
                 x: 50,
                 y: 150,
-                width: 40,
-                height: 40,
+                width: 32,
+                height: 32,
                 velocity: 0,
                 gravity: 0.8,
                 jumpStrength: -15,
@@ -304,10 +304,10 @@
             // Класс препятствия
             class Obstacle {
                 constructor() {
-                    this.width = 30;
-                    this.height = 50;
+                    this.width = 32;
+                    this.height = 32;
                     this.x = canvas.width;
-                    this.y = 150;
+                    this.y = 150; // Такая же высота, как у кота
                     this.speed = gameSpeed;
                 }
                 
@@ -317,11 +317,12 @@
                 
                 draw() {
                     if (images.cactus.complete) {
-                        ctx.drawImage(images.cactus, this.x, this.y - this.height + 10, this.width, this.height);
+                        // Рисуем кактус на той же высоте, что и кот
+                        ctx.drawImage(images.cactus, this.x, this.y - this.height + 5, this.width, this.height);
                     } else {
                         // Запасной вариант
                         ctx.fillStyle = '#2ecc71';
-                        ctx.fillRect(this.x, this.y - this.height + 10, this.width, this.height);
+                        ctx.fillRect(this.x, this.y - this.height + 5, this.width, this.height);
                     }
                 }
                 
@@ -332,8 +333,8 @@
                 collidesWith(obj) {
                     return this.x < obj.x + obj.width &&
                            this.x + this.width > obj.x &&
-                           this.y - this.height + 10 < obj.y + obj.height &&
-                           this.y + 10 > obj.y;
+                           this.y - this.height + 5 < obj.y + obj.height &&
+                           this.y + 5 > obj.y;
                 }
             }
             
@@ -414,6 +415,40 @@
                 }
             }
             
+            // Функция для рисования фона
+            function drawBackground() {
+                // Небо с градиентом
+                const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 0.7);
+                skyGradient.addColorStop(0, '#5d9cec');
+                skyGradient.addColorStop(1, '#a0cfee');
+                ctx.fillStyle = skyGradient;
+                ctx.fillRect(0, 0, canvas.width, canvas.height * 0.7);
+                
+                // Земля
+                ctx.fillStyle = '#8bc34a';
+                ctx.fillRect(0, canvas.height * 0.7, canvas.width, canvas.height * 0.3);
+                
+                // Солнце
+                ctx.fillStyle = '#ffce54';
+                ctx.beginPath();
+                ctx.arc(canvas.width - 40, 40, 30, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Облака
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.arc(100, 50, 20, 0, Math.PI * 2);
+                ctx.arc(130, 50, 25, 0, Math.PI * 2);
+                ctx.arc(160, 50, 20, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.beginPath();
+                ctx.arc(250, 70, 15, 0, Math.PI * 2);
+                ctx.arc(270, 70, 20, 0, Math.PI * 2);
+                ctx.arc(290, 70, 15, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
             // Основной игровой цикл
             function gameLoop() {
                 if (!gameRunning) return;
@@ -422,10 +457,7 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
                 // Рисуем фон
-                ctx.fillStyle = '#2c3e50';
-                ctx.fillRect(0, 0, canvas.width, canvas.height * 0.75);
-                ctx.fillStyle = '#34495e';
-                ctx.fillRect(0, canvas.height * 0.75, canvas.width, canvas.height * 0.25);
+                drawBackground();
                 
                 // Обновление и отрисовка кота
                 cat.update();
